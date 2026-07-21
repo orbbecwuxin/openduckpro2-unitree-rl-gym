@@ -2,7 +2,6 @@ import numpy as np
 import torch
 
 from isaacgym import gymtorch
-from isaacgym.torch_utils import torch_rand_float
 
 from legged_gym.envs.base.legged_robot import LeggedRobot
 
@@ -45,17 +44,6 @@ class OpenDuckPro2Robot(LeggedRobot):
 
     def _init_buffers(self):
         super()._init_buffers()
-        hip_names = [
-            "left_leg_roll_joint",
-            "left_leg_yaw_joint",
-            "right_leg_roll_joint",
-            "right_leg_yaw_joint",
-        ]
-        self.hip_indices = torch.tensor(
-            [self.dof_names.index(name) for name in hip_names],
-            dtype=torch.long,
-            device=self.device,
-        )
         self._init_foot()
 
     def update_feet_state(self):
@@ -117,9 +105,7 @@ class OpenDuckPro2Robot(LeggedRobot):
         return res
 
     def _reward_feet_swing_height(self):
-        contact = torch.norm(
-            self.contact_forces[:, self.feet_indices, :3], dim=2
-        ) > 1.0
+        contact = torch.norm(self.contact_forces[:, self.feet_indices, :3], dim=2) > 1.0
         pos_error = torch.square(self.feet_pos[:, :, 2] - 0.08) * ~contact
         return torch.sum(pos_error, dim=1)
 
@@ -135,42 +121,4 @@ class OpenDuckPro2Robot(LeggedRobot):
         return torch.sum(penalize, dim=(1,2))
 
     def _reward_hip_pos(self):
-        return torch.sum(
-            torch.square(self.dof_pos[:, self.hip_indices]), dim=1
-        )
-
-    def _resample_commands(self, env_ids):
-        if len(env_ids) == 0:
-            return
-
-        self.commands[env_ids, 0] = torch_rand_float(
-            self.command_ranges["lin_vel_x"][0],
-            self.command_ranges["lin_vel_x"][1],
-            (len(env_ids), 1),
-            device=self.device,
-        ).squeeze(1)
-        self.commands[env_ids, 1] = torch_rand_float(
-            self.command_ranges["lin_vel_y"][0],
-            self.command_ranges["lin_vel_y"][1],
-            (len(env_ids), 1),
-            device=self.device,
-        ).squeeze(1)
-        if self.cfg.commands.heading_command:
-            self.commands[env_ids, 3] = torch_rand_float(
-                self.command_ranges["heading"][0],
-                self.command_ranges["heading"][1],
-                (len(env_ids), 1),
-                device=self.device,
-            ).squeeze(1)
-        else:
-            self.commands[env_ids, 2] = torch_rand_float(
-                self.command_ranges["ang_vel_yaw"][0],
-                self.command_ranges["ang_vel_yaw"][1],
-                (len(env_ids), 1),
-                device=self.device,
-            ).squeeze(1)
-
-        min_norm = self.cfg.commands.min_command_norm
-        self.commands[env_ids, :2] *= (
-            torch.norm(self.commands[env_ids, :2], dim=1) > min_norm
-        ).unsqueeze(1)
+        return torch.sum(torch.square(self.dof_pos[:, [0, 1, 5, 6]]), dim=1)
