@@ -156,10 +156,7 @@ class OpenDuckPro2Robot(LeggedRobot):
         contact = torch.norm(
             self.contact_forces[:, self.feet_indices, :3], dim=2
         ) > 1.0
-        target_height = self.cfg.rewards.swing_height_target
-        pos_error = torch.square(
-            self.feet_pos[:, :, 2] - target_height
-        ) * ~contact
+        pos_error = torch.square(self.feet_pos[:, :, 2] - 0.08) * ~contact
         return torch.sum(pos_error, dim=1)
 
     def _reward_alive(self):
