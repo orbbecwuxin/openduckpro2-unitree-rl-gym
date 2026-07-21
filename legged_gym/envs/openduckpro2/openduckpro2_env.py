@@ -65,42 +65,6 @@ class OpenDuckPro2Robot(LeggedRobot):
         self.feet_pos = self.feet_state[:, :, :3]
         self.feet_vel = self.feet_state[:, :, 7:10]
 
-    def _resample_commands(self, env_ids):
-        if len(env_ids) == 0:
-            return
-
-        self.commands[env_ids, 0] = torch_rand_float(
-            self.command_ranges["lin_vel_x"][0],
-            self.command_ranges["lin_vel_x"][1],
-            (len(env_ids), 1),
-            device=self.device,
-        ).squeeze(1)
-        self.commands[env_ids, 1] = torch_rand_float(
-            self.command_ranges["lin_vel_y"][0],
-            self.command_ranges["lin_vel_y"][1],
-            (len(env_ids), 1),
-            device=self.device,
-        ).squeeze(1)
-        if self.cfg.commands.heading_command:
-            self.commands[env_ids, 3] = torch_rand_float(
-                self.command_ranges["heading"][0],
-                self.command_ranges["heading"][1],
-                (len(env_ids), 1),
-                device=self.device,
-            ).squeeze(1)
-        else:
-            self.commands[env_ids, 2] = torch_rand_float(
-                self.command_ranges["ang_vel_yaw"][0],
-                self.command_ranges["ang_vel_yaw"][1],
-                (len(env_ids), 1),
-                device=self.device,
-            ).squeeze(1)
-
-        min_norm = self.cfg.commands.min_command_norm
-        self.commands[env_ids, :2] *= (
-            torch.norm(self.commands[env_ids, :2], dim=1) > min_norm
-        ).unsqueeze(1)
-
     def _post_physics_step_callback(self):
         self.update_feet_state()
 
@@ -174,3 +138,39 @@ class OpenDuckPro2Robot(LeggedRobot):
         return torch.sum(
             torch.square(self.dof_pos[:, self.hip_indices]), dim=1
         )
+
+    def _resample_commands(self, env_ids):
+        if len(env_ids) == 0:
+            return
+
+        self.commands[env_ids, 0] = torch_rand_float(
+            self.command_ranges["lin_vel_x"][0],
+            self.command_ranges["lin_vel_x"][1],
+            (len(env_ids), 1),
+            device=self.device,
+        ).squeeze(1)
+        self.commands[env_ids, 1] = torch_rand_float(
+            self.command_ranges["lin_vel_y"][0],
+            self.command_ranges["lin_vel_y"][1],
+            (len(env_ids), 1),
+            device=self.device,
+        ).squeeze(1)
+        if self.cfg.commands.heading_command:
+            self.commands[env_ids, 3] = torch_rand_float(
+                self.command_ranges["heading"][0],
+                self.command_ranges["heading"][1],
+                (len(env_ids), 1),
+                device=self.device,
+            ).squeeze(1)
+        else:
+            self.commands[env_ids, 2] = torch_rand_float(
+                self.command_ranges["ang_vel_yaw"][0],
+                self.command_ranges["ang_vel_yaw"][1],
+                (len(env_ids), 1),
+                device=self.device,
+            ).squeeze(1)
+
+        min_norm = self.cfg.commands.min_command_norm
+        self.commands[env_ids, :2] *= (
+            torch.norm(self.commands[env_ids, :2], dim=1) > min_norm
+        ).unsqueeze(1)

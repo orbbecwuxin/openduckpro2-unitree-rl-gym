@@ -4,14 +4,6 @@ from legged_gym.envs.base.legged_robot_config import LeggedRobotCfg, LeggedRobot
 class OpenDuckPro2RoughCfg(LeggedRobotCfg):
     """Isaac Gym training config for the 10-DOF OpenDuckPro2 URDF export."""
 
-    class env(LeggedRobotCfg.env):
-        # 3 ang_vel + 3 gravity + 3 commands + 10 dof pos + 10 dof vel
-        # + 10 previous actions + 2 gait phase terms
-        num_observations = 41
-        num_privileged_obs = 44  # + 3 base_lin_vel for the critic
-        num_actions = 10
-        env_spacing = 2.0
-
     class init_state(LeggedRobotCfg.init_state):
         pos = [0.0, 0.0, 0.347]
         default_joint_angles = {
@@ -26,6 +18,23 @@ class OpenDuckPro2RoughCfg(LeggedRobotCfg):
             "right_knee_pitch_joint": 0.93,
             "right_ankle_pitch_joint": -0.53,
         }
+
+    class env(LeggedRobotCfg.env):
+        # 3 ang_vel + 3 gravity + 3 commands + 10 dof pos + 10 dof vel
+        # + 10 previous actions + 2 gait phase terms
+        num_observations = 41
+        num_privileged_obs = 44  # + 3 base_lin_vel for the critic
+        num_actions = 10
+        env_spacing = 2.0
+
+    class domain_rand(LeggedRobotCfg.domain_rand):
+        randomize_friction = True
+        friction_range = [0.1, 1.25]
+        randomize_base_mass = True
+        added_mass_range = [-0.5, 0.5]
+        push_robots = False
+        push_interval_s = 5
+        max_push_vel_xy = 0.4
 
     class control(LeggedRobotCfg.control):
         control_type = "P"
@@ -61,17 +70,8 @@ class OpenDuckPro2RoughCfg(LeggedRobotCfg):
         penalize_contacts_on = ["knee_pitch_link", "leg_pitch_link"]
         terminate_after_contacts_on = ["base_link"]
         default_dof_drive_mode = 3
-        self_collisions = 1
+        self_collisions = 0
         flip_visual_attachments = False
-
-    class domain_rand(LeggedRobotCfg.domain_rand):
-        randomize_friction = True
-        friction_range = [0.1, 1.25]
-        randomize_base_mass = True
-        added_mass_range = [-0.5, 0.5]
-        push_robots = False
-        push_interval_s = 5
-        max_push_vel_xy = 0.4
 
     class commands(LeggedRobotCfg.commands):
         heading_command = True
@@ -86,7 +86,7 @@ class OpenDuckPro2RoughCfg(LeggedRobotCfg):
     class rewards(LeggedRobotCfg.rewards):
         soft_dof_pos_limit = 0.9
         base_height_target = 0.338
-        swing_phase_threshold = 0.55
+        # swing_phase_threshold = 0.55
 
         class scales(LeggedRobotCfg.rewards.scales):
             tracking_lin_vel = 2.0
@@ -108,9 +108,9 @@ class OpenDuckPro2RoughCfg(LeggedRobotCfg):
             feet_swing_height = -20.0
             contact = 0.18
 
-    class viewer(LeggedRobotCfg.viewer):
-        pos = [2.0, -3.0, 1.4]
-        lookat = [0.0, 0.0, 0.25]
+    # class viewer(LeggedRobotCfg.viewer):
+    #     pos = [2.0, -3.0, 1.4]
+    #     lookat = [0.0, 0.0, 0.25]
 
 
 class OpenDuckPro2RoughCfgPPO(LeggedRobotCfgPPO):
