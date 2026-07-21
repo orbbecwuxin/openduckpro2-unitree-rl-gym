@@ -66,12 +66,13 @@ scale 不能为零，不能反转正负号。`feet_air_time` 与 `collision` 保
 在 Isaac Gym、PyTorch 和 `rsl_rl` 环境已经激活后执行：
 
 ```bash
-./auto_train_openduckpro2.sh \
+legged_gym/scripts/launch_openduckpro2_training.sh \
   --config configs/auto_train/openduckpro2_default.json \
-  --run-id <unique-run-id>
+  --run-id <unique-run-id> \
+  --source-commit <reviewed-source-sha>
 ```
 
-启动前会校验 10K budget、1K milestone 列表、reward 白名单、候选是否从零开始，以及 draft PR 元数据。任一条件不满足都会阻止训练。
+脚本默认在后台启动并打印 controller PID 与日志路径；使用 `--foreground` 可保持前台运行，使用 `--validate-only` 可只校验而不创建训练目录。`CONDA_ENV` 和 `PYTHON` 环境变量可覆盖服务器默认环境。启动前会校验源码 commit、干净工作树、10K budget、1K milestone 列表、reward 白名单、候选是否从零开始，以及 draft PR 元数据。任一条件不满足都会阻止训练。
 
 ## 产物布局
 
