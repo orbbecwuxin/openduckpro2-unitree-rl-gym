@@ -37,7 +37,7 @@ class OpenDuckPro2RoughCfg(LeggedRobotCfg):
         max_push_vel_xy = 0.4
 
     class control(LeggedRobotCfg.control):
-        control_type = "P"
+        control_type = 'P'
         stiffness = {
             "leg_yaw": 20.0,
             "leg_roll": 30.0,
@@ -54,14 +54,6 @@ class OpenDuckPro2RoughCfg(LeggedRobotCfg):
         }
         action_scale = 0.25
         decimation = 4
-
-    class sim(LeggedRobotCfg.sim):
-        dt = 0.005
-
-        class physx(LeggedRobotCfg.sim.physx):
-            contact_offset = 0.008
-            rest_offset = 0.0
-            max_depenetration_velocity = 0.5
 
     class asset(LeggedRobotCfg.asset):
         file = "{LEGGED_GYM_ROOT_DIR}/openduckpro2/urdf/openduckpro2.urdf"
