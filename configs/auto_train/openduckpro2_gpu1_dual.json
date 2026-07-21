@@ -1,4 +1,0 @@
-{
-  "gpus": [1, 1],
-  "max_parallel_jobs": 2
-}

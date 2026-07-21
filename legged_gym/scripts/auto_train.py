@@ -132,6 +132,12 @@ def validate_continuous_training_config(config):
     if not continuous.get("enabled", False):
         return
 
+    if config.get("codex_control", {}).get("allow_auto_mutation_fallback", False):
+        raise ValueError(
+            "continuous_training forbids automatic mutation fallback; "
+            "every candidate requires its own draft PR"
+        )
+
     max_iterations = int(config["train"]["max_iterations"])
     if max_iterations != 10000:
         raise ValueError(
@@ -198,11 +204,21 @@ def validate_continuous_training_config(config):
                 f"Continuous candidate {candidate_name} is missing training PR "
                 "metadata: " + ", ".join(missing_pr_fields)
             )
+        try:
+            pr_number = int(training_pr.get("number") or 0)
+        except (TypeError, ValueError):
+            pr_number = 0
+        expected_pr_url = (
+            "https://github.com/orbbecwuxin/openduck-training-control/pull/"
+            f"{pr_number}"
+        )
         if (
             training_pr.get("repo") != "orbbecwuxin/openduck-training-control"
             or training_pr.get("created_with") != "gh"
             or training_pr.get("state") != "OPEN"
             or training_pr.get("is_draft") is not True
+            or pr_number <= 0
+            or training_pr.get("url") != expected_pr_url
         ):
             raise ValueError(
                 f"Continuous candidate {candidate_name} must reference an open "
@@ -855,7 +871,7 @@ def clean_checkpoint_record(result):
     if not candidate_is_admissible(result):
         return None
     target_iteration = int(result.get("target_iteration") or 0)
-    if target_iteration != 4000:
+    if target_iteration != 10000:
         return None
     candidate = result.get("candidate") or {}
     evaluation = result.get("evaluation") or {}
@@ -893,7 +909,7 @@ def clean_checkpoint_sort_key(record):
 
 
 def load_clean_checkpoint_archive(run_root):
-    default = {"records": [], "best_4k": None}
+    default = {"records": [], "best_10k": None}
     return load_json(run_root / "clean_checkpoint_archive.json", default=default) or default
 
 
@@ -907,8 +923,8 @@ def update_clean_checkpoint_archive(repo_root, run_root, result, no_commit):
     records.append(record)
     records.sort(key=clean_checkpoint_sort_key, reverse=True)
     archive = {
-        "policy": "4K admissible checkpoints are protected rollback parents; 5K is validation and must not overwrite a clean 4K champion.",
-        "best_4k": records[0] if records else None,
+        "policy": "Admissible 10K checkpoints are protected final candidates and ranked by gait quality before scalar score.",
+        "best_10k": records[0] if records else None,
         "records": records[:20],
     }
     archive_path = run_root / "clean_checkpoint_archive.json"
@@ -938,7 +954,6 @@ def mutate_candidates(best_candidate, best_evaluation, count, source_cycle):
             scales["base_height"] = signed_scale(scales.get("base_height", -10.0), 1.10 * multiplier)
         if nodes.get("upright", {}).get("score", 1.0) < 0.75:
             scales["orientation"] = signed_scale(scales.get("orientation", -1.0), 1.10 * multiplier)
-            scales["landing_foot_posture"] = signed_scale(scales.get("landing_foot_posture", 0.35), 1.05 * multiplier)
         if nodes.get("energy", {}).get("score", 1.0) < 0.75:
             scales["torques"] = signed_scale(scales.get("torques", -0.00001), 1.10 * multiplier)
             scales["dof_acc"] = signed_scale(scales.get("dof_acc", -0.00000025), 1.05 * multiplier)
@@ -947,7 +962,6 @@ def mutate_candidates(best_candidate, best_evaluation, count, source_cycle):
             scales["dof_vel"] = signed_scale(scales.get("dof_vel", -0.001), 1.05 * multiplier)
         if nodes.get("foot_trajectory", {}).get("score", 1.0) < 0.80:
             scales["feet_swing_height"] = signed_scale(scales.get("feet_swing_height", -20.0), 1.10 * multiplier)
-            scales["landing_foot_posture"] = signed_scale(scales.get("landing_foot_posture", 0.35), 1.05 * multiplier)
         if nodes.get("foot_alternation", {}).get("score", 1.0) < 0.80:
             scales["contact"] = signed_scale(scales.get("contact", 0.18), 1.12 * multiplier)
             scales["feet_swing_height"] = signed_scale(scales.get("feet_swing_height", -20.0), 1.08 * multiplier)
@@ -988,7 +1002,7 @@ def summarize_cycle(cycle_dir, results):
         "candidates": results,
         "best": scored[0][1] if scored else None,
         "best_clean_checkpoint": clean_records[0] if clean_records else None,
-        "best_4k_checkpoint": clean_records[0] if clean_records else None,
+        "best_10k_checkpoint": clean_records[0] if clean_records else None,
         "clean_checkpoint_candidates": clean_records,
         "selection_order": [
             {
@@ -1006,7 +1020,7 @@ def summarize_cycle(cycle_dir, results):
         clean = summary["best_clean_checkpoint"]
         quality = clean.get("quality") or {}
         lines.append(
-            f"- Protected 4K clean checkpoint: {clean.get('candidate')} "
+            f"- Protected 10K clean checkpoint: {clean.get('candidate')} "
             f"score={clean.get('score')} strict={quality.get('strict_champion')} "
             f"same_foot={quality.get('sample_same_foot_repeat_count')} "
             f"double_lift={quality.get('double_lift_violation_count')}"
@@ -1167,7 +1181,7 @@ def write_codex_review_request(
         "best": best,
         "candidates": reviews,
         "clean_checkpoint_archive": clean_archive,
-        "protected_4k_checkpoint": clean_archive.get("best_4k"),
+        "protected_10k_checkpoint": clean_archive.get("best_10k"),
         "summary_best_clean_checkpoint": summary.get("best_clean_checkpoint"),
         "suggested_train_max_iterations": suggested_iterations,
         "suggested_next_candidates": suggested_candidates,
@@ -1183,10 +1197,10 @@ def write_codex_review_request(
             "candidate-local stop is allowed only for runtime failure or an explicit user stop, not ordinary immature milestone behavior.",
         ],
         "decision_schema": {
-            "action": "continue | auto_mutate | stop",
+            "action": "continue | stop; auto_mutate is forbidden for continuous training",
             "decision_scope": "slot-local; stop means stop current candidate/slot review, not the whole run",
             "train_max_iterations": "optional int; defaults to suggested_train_max_iterations",
-            "next_candidates": "required for action=continue unless allow_auto_mutation_fallback is enabled; optional for candidate-local stop",
+            "next_candidates": "required for action=continue; every candidate must include independent draft PR metadata",
             "reward_source_commit": "required unchanged G1-aligned training source git sha",
             "reward_source_changes": {
                 "added_rewards": "must be an empty list",
@@ -1222,20 +1236,20 @@ def write_codex_review_request(
     else:
         lines.append("- No successful evaluation.")
 
-    protected = clean_archive.get("best_4k") if isinstance(clean_archive, dict) else None
+    protected = clean_archive.get("best_10k") if isinstance(clean_archive, dict) else None
     if protected:
         quality = protected.get("quality") or {}
         lines.extend(
             [
                 "",
-                "## Protected 4K Checkpoint",
+                "## Protected 10K Checkpoint",
                 f"- Candidate: `{protected.get('candidate')}`",
                 f"- Checkpoint: `{protected.get('checkpoint_path')}`",
                 f"- Score: `{protected.get('score')}`",
                 f"- Strict champion: `{quality.get('strict_champion')}`",
                 f"- Same-foot repeats: `{quality.get('sample_same_foot_repeat_count')}`",
                 f"- Double-lift violations: `{quality.get('double_lift_violation_count')}`",
-                "- Policy: 5K is validation; if 5K regresses, prefer this clean 4K parent or candidate-local stop.",
+                "- Policy: only a complete admissible 10K checkpoint can become a protected candidate.",
             ]
         )
     lines.extend(
@@ -1243,8 +1257,8 @@ def write_codex_review_request(
             "",
             "## Required Codex Action",
             "",
-            "Inspect the simlog artifacts, edit reward source logic when needed, commit the change, then write `codex_decision.json`.",
-            "Use reward scale changes only for small retuning or when explicitly justified by the simlog.",
+            "Inspect the complete 10K artifacts, then write a scale-only `codex_decision.json` or report a blocker.",
+            "Do not add, remove, rename, or rewrite rewards; each replacement candidate requires its own draft PR.",
             "",
             "Example decision:",
             "",
@@ -1254,17 +1268,18 @@ def write_codex_review_request(
             f'  "train_max_iterations": {suggested_iterations},',
             f'  "milestone_iteration": {best.get("milestone_iteration") if best else None},',
             f'  "checkpoint_path": "{best.get("checkpoint_path") if best else ""}",',
-            '  "reward_source_commit": "<git-sha-or-empty>",',
+            '  "reward_contract": "g1",',
+            '  "reward_source_commit": "<unchanged-source-sha>",',
             '  "reward_source_changes": {',
-            '    "added_rewards": ["alternating_lift_sequence"],',
+            '    "added_rewards": [],',
             '    "removed_rewards": [],',
-            '    "modified_rewards": ["feet_swing_height"],',
-            '    "scale_only": false,',
-            '    "evidence": "simlog showed repeated same-foot lift-offs and foot reference error"',
+            '    "modified_rewards": [],',
+            '    "scale_only": true,',
+            '    "evidence": "10K artifacts support a contact-family scale test"',
             "  },",
-            '  "notes": "Codex changed reward logic because simlog showed repeated same-foot lift-offs.",',
+            '  "notes": "Create one scale-only replacement candidate with an independent draft PR.",',
             '  "next_candidates": [',
-            '    {"name": "codex_reward_fix_c001", "reward_scales": {}}',
+            '    {"name": "contact_scale_seed1", "reward_scales": {"contact": 0.2}, "training_pr": {"repo": "orbbecwuxin/openduck-training-control", "number": 123, "url": "https://github.com/orbbecwuxin/openduck-training-control/pull/123", "head_ref": "train/contact-scale-seed1", "base_ref": "main", "created_with": "gh", "state": "OPEN", "is_draft": true}}',
             "  ]",
             "}",
             "```",
@@ -1309,17 +1324,36 @@ def wait_for_codex_decision(repo_root, run_root, cycle_dir, config, review_reque
             try:
                 decision = load_codex_decision(decision_path)
                 if (
-                    decision["action"] == "continue"
-                    and not decision.get("next_candidates")
-                    and not codex_cfg.get("allow_auto_mutation_fallback", False)
+                    decision["action"] == "auto_mutate"
+                    and config.get("continuous_training", {}).get("enabled", False)
                 ):
-                    raise ValueError("action=continue requires next_candidates")
+                    raise ValueError("continuous_training forbids action=auto_mutate")
                 if decision["action"] == "continue":
+                    next_candidates = decision.get("next_candidates")
+                    if not next_candidates:
+                        raise ValueError("action=continue requires next_candidates")
+                    if decision.get("reward_contract") != "g1":
+                        raise ValueError("action=continue requires reward_contract=g1")
+                    if int(decision.get("train_max_iterations") or 0) != 10000:
+                        raise ValueError("action=continue requires train_max_iterations=10000")
+                    if int(decision.get("milestone_iteration") or 0) != 10000:
+                        raise ValueError("action=continue requires milestone_iteration=10000")
+                    if not decision.get("reward_source_commit"):
+                        raise ValueError("action=continue requires the unchanged reward_source_commit")
                     changes = decision.get("reward_source_changes")
                     if not isinstance(changes, dict):
                         raise ValueError("action=continue requires reward_source_changes")
-                    if not changes.get("scale_only", False) and not decision.get("reward_source_commit"):
-                        raise ValueError("source reward changes require reward_source_commit")
+                    if changes.get("scale_only") is not True:
+                        raise ValueError("action=continue requires reward_source_changes.scale_only=true")
+                    for field in ("added_rewards", "removed_rewards", "modified_rewards"):
+                        if changes.get(field) != []:
+                            raise ValueError(
+                                f"action=continue requires reward_source_changes.{field}=[]"
+                            )
+                    next_config = copy.deepcopy(config)
+                    next_config["train"]["max_iterations"] = 10000
+                    next_config["candidates"] = next_candidates
+                    validate_continuous_training_config(next_config)
             except Exception as exc:  # noqa: BLE001
                 write_json(
                     error_path,

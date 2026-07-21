@@ -168,3 +168,24 @@ auto_train_runs/**/STOP
 # Audit artifacts such as reward_challenge.json and codex_decision.json are
 # force-added explicitly when a Codex reward decision is committed.
 auto_train_runs/
+
+# This distribution contains OpenDuck robots only. Keep reference robot assets
+# and environments out of future source syncs.
+/legged_gym/envs/g1/
+/legged_gym/envs/go2/
+/legged_gym/envs/h1/
+/legged_gym/envs/h1_2/
+/resources/robots/g1_description/
+/resources/robots/go2/
+/resources/robots/h1/
+/resources/robots/h1_2/
+# Duplicate package path; the canonical model is /openduckpro2.
+/resources/robots/openduckpro2/
+# Deployment scenes and policies live in their dedicated repositories.
+/deploy/
+/deploy_open_duck_mujoco.sh
+
+# Local parameter-search candidates can contain machine-specific PR metadata.
+/configs/auto_train/openduckpro2_continuous_swing*.json
+/configs/auto_train/openduckpro2_g1aligned_*.json
+/configs/auto_train/openduckpro2_spawnfix_*.json

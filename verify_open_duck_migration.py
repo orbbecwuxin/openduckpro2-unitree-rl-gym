@@ -5,21 +5,24 @@ source MJCF and the legged_gym config, and does a small forward-kinematics pass
 to confirm the default ("home") pose does not penetrate the ground (so `reset`
 will not bounce the robot up).
 
-Run:  python3 verify_open_duck_migration.py
+Run:  python3 verify_open_duck_migration.py --mjcf /path/to/open_duck_mini_v2.xml
 """
 
+import argparse
 import ast
 import math
 import os
+
+PARSER = argparse.ArgumentParser(description="Verify the OpenDuck Mini URDF migration.")
+PARSER.add_argument("--mjcf", required=True, help="Path to the source OpenDuck Mini MJCF XML.")
+ARGS = PARSER.parse_args()
 
 import numpy as np
 from lxml import etree
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 URDF = os.path.join(HERE, "resources", "robots", "open_duck_mini", "open_duck_mini.urdf")
-MJCF = os.path.normpath(os.path.join(
-    HERE, "..", "Open_Duck_Playground", "playground", "open_duck_mini_v2",
-    "xmls", "open_duck_mini_v2.xml"))
+MJCF = os.path.abspath(ARGS.mjcf)
 CONFIG = os.path.join(HERE, "legged_gym", "envs", "open_duck", "open_duck_config.py")
 
 EXPECTED_ORDER = [

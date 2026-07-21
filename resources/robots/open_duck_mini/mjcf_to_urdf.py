@@ -1,8 +1,7 @@
 """Convert the Open Duck Mini v2 MuJoCo training model (MJCF) to a URDF that
 Isaac Gym / legged_gym (unitree_rl_gym) can load.
 
-Source of truth (the model *currently used for training*):
-    Open_Duck_Playground/playground/open_duck_mini_v2/xmls/open_duck_mini_v2.xml
+Source input is provided explicitly with ``--mjcf``.
 
 Why a conversion is needed
 --------------------------
@@ -22,23 +21,22 @@ legged_gym config instead (see open_duck_config.py).
 This script only depends on numpy + lxml (no mujoco), so it can run anywhere.
 """
 
+import argparse
 import math
 import os
 import shutil
+
+PARSER = argparse.ArgumentParser(description="Convert OpenDuck Mini MJCF to URDF.")
+PARSER.add_argument("--mjcf", required=True, help="Path to the source OpenDuck Mini MJCF XML.")
+PARSER.add_argument("--assets-dir", help="Mesh directory; defaults to an assets directory beside the MJCF.")
+ARGS = PARSER.parse_args()
 
 import numpy as np
 from lxml import etree
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-PLAYGROUND_XMLS = os.path.normpath(
-    os.path.join(
-        HERE,
-        "..", "..", "..", "..",
-        "Open_Duck_Playground", "playground", "open_duck_mini_v2", "xmls",
-    )
-)
-MJCF_PATH = os.path.join(PLAYGROUND_XMLS, "open_duck_mini_v2.xml")
-ASSETS_SRC = os.path.join(PLAYGROUND_XMLS, "assets")
+MJCF_PATH = os.path.abspath(ARGS.mjcf)
+ASSETS_SRC = os.path.abspath(ARGS.assets_dir or os.path.join(os.path.dirname(MJCF_PATH), "assets"))
 
 OUT_DIR = HERE
 MESH_DIR = os.path.join(OUT_DIR, "meshes")

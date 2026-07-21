@@ -663,8 +663,8 @@ def build_simlog(metrics, score, rows, base_height_target, swing_height_target):
         "issues": issues,
         "codex_policy": {
             "decision_owner": "codex",
-            "rule": "Use simlog evidence to add, remove, or rewrite reward source terms when behavior failure is structural; use reward_scales only for small retuning.",
-            "expected_next_step": "Codex reviews evaluation.json, trajectory.csv/svg, train.log, and evaluate.log, then commits reward-source changes or explicitly records scale_only before the next training candidate.",
+            "rule": "Use simlog evidence to tune only existing nonzero reward scales; report a blocker when structural failure cannot be expressed by the frozen reward contract.",
+            "expected_next_step": "Codex reviews evaluation.json, trajectory.csv/svg, train.log, and evaluate.log, then records a scale-only decision or blocker before creating a PR-backed candidate.",
         },
     }
 
