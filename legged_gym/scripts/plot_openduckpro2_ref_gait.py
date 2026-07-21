@@ -86,7 +86,7 @@ def load_reference_config(config_path: Path) -> dict:
         "action_scale": float(_assigned_literal(control, "action_scale")),
         "base_height_target": float(_assigned_literal(rewards, "base_height_target")),
         "swing_phase_threshold": float(_assigned_literal(rewards, "swing_phase_threshold")),
-        "swing_height_target": float(_assigned_literal(rewards, "swing_height_target")),
+        "swing_height_target": 0.08,
         "ref_hip_pitch_amp": float(_assigned_literal(rewards, "ref_hip_pitch_amp")),
         "ref_knee_pitch_amp": float(_assigned_literal(rewards, "ref_knee_pitch_amp")),
         "ref_ankle_pitch_amp": float(_assigned_literal(rewards, "ref_ankle_pitch_amp")),
