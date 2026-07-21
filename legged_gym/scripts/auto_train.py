@@ -8,7 +8,14 @@ import sys
 import time
 from pathlib import Path
 
-from auto_train_common import git_commit_paths, load_json, repo_root_from_script, timestamp_id, write_json
+from auto_train_common import (
+    git_commit_paths,
+    load_json,
+    normalize_command_ranges,
+    repo_root_from_script,
+    timestamp_id,
+    write_json,
+)
 
 
 DEFAULT_CONFIG = {
@@ -162,6 +169,7 @@ def validate_continuous_training_config(config):
     allowed_scales = G1_POSITIVE_REWARD_SCALES | G1_NEGATIVE_REWARD_SCALES
     for candidate in candidates:
         candidate_name = candidate.get("name", "candidate")
+        normalize_command_ranges(candidate.get("command_ranges", {}))
         scales = candidate.get("reward_scales", {})
         unknown = sorted(set(scales) - allowed_scales)
         if unknown:
@@ -300,6 +308,8 @@ def build_train_command(config, candidate, candidate_dir, gpu, run_name, segment
         "legged_gym/scripts/train_reward_variant.py",
         "--reward-overrides",
         str(candidate_dir / "reward_overrides.json"),
+        "--command-overrides",
+        str(candidate_dir / "command_overrides.json"),
         "--auto-train-meta",
         str(candidate_dir / "train_meta.json"),
         f"--task={config['task']}",
@@ -344,6 +354,8 @@ def build_eval_command(
         "legged_gym/scripts/evaluate_policy.py",
         "--reward-overrides",
         str(candidate_dir / "reward_overrides.json"),
+        "--command-overrides",
+        str(candidate_dir / "command_overrides.json"),
         "--output",
         str(artifact_dir / "evaluation.json"),
         f"--task={config['task']}",
@@ -577,6 +589,14 @@ def run_candidate(repo_root, config, run_id, cycle_index, candidate_index, candi
         "reward_scales": candidate.get("reward_scales", {}),
     }
     write_json(candidate_dir / "reward_overrides.json", reward_overrides)
+    command_overrides = {
+        "name": candidate["name"],
+        "cycle": cycle_index,
+        "command_ranges": normalize_command_ranges(
+            candidate.get("command_ranges", {})
+        ),
+    }
+    write_json(candidate_dir / "command_overrides.json", command_overrides)
 
     run_name = f"{run_id}_c{cycle_index:03d}_{candidate_index:02d}_{candidate_name}"
     resume = candidate.get("resume") or {}

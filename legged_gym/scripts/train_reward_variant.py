@@ -10,10 +10,12 @@ from legged_gym.envs import *  # noqa: F401,F403
 from legged_gym.utils import get_args, task_registry
 
 from auto_train_common import (
+    apply_command_overrides,
     apply_reward_overrides,
     latest_checkpoint,
     latest_run_dir,
     load_json,
+    read_command_ranges,
     read_reward_scales,
     write_json,
 )
@@ -22,6 +24,7 @@ from auto_train_common import (
 def parse_custom_args(argv):
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument("--reward-overrides")
+    parser.add_argument("--command-overrides")
     parser.add_argument("--auto-train-meta")
     custom, remaining = parser.parse_known_args(argv)
     return custom, remaining
@@ -31,6 +34,9 @@ def train(args, custom):
     started_at = time.time()
     env_cfg, train_cfg = task_registry.get_cfgs(name=args.task)
     requested_overrides = apply_reward_overrides(env_cfg, custom.reward_overrides)
+    requested_command_ranges = apply_command_overrides(
+        env_cfg, custom.command_overrides
+    )
 
     env, env_cfg = task_registry.make_env(name=args.task, args=args, env_cfg=env_cfg)
     ppo_runner, train_cfg = task_registry.make_alg_runner(
@@ -59,7 +65,9 @@ def train(args, custom):
                 "load_run": run_dir.name if run_dir is not None else None,
                 "latest_checkpoint": str(checkpoint) if checkpoint is not None else None,
                 "requested_reward_overrides": requested_overrides,
+                "requested_command_ranges": requested_command_ranges,
                 "effective_reward_scales": read_reward_scales(env_cfg),
+                "effective_command_ranges": read_command_ranges(env_cfg),
             },
         )
 
