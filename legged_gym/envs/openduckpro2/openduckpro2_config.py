@@ -25,7 +25,6 @@ class OpenDuckPro2RoughCfg(LeggedRobotCfg):
         num_observations = 41
         num_privileged_obs = 44  # + 3 base_lin_vel for the critic
         num_actions = 10
-        env_spacing = 2.0
 
     class domain_rand(LeggedRobotCfg.domain_rand):
         randomize_friction = True
@@ -70,7 +69,6 @@ class OpenDuckPro2RoughCfg(LeggedRobotCfg):
             lin_vel_x = [-0.25, 0.25]
             lin_vel_y = [-0.18, 0.18]
             ang_vel_yaw = [-0.156, 0.156]
-            heading = [-3.14, 3.14]
 
     class rewards(LeggedRobotCfg.rewards):
         soft_dof_pos_limit = 0.9
