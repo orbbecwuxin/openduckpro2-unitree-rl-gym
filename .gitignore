@@ -185,7 +185,8 @@ auto_train_runs/
 /deploy/
 /deploy_open_duck_mujoco.sh
 
-# Local parameter-search candidates can contain machine-specific PR metadata.
-/configs/auto_train/openduckpro2_continuous_swing*.json
-/configs/auto_train/openduckpro2_g1aligned_*.json
-/configs/auto_train/openduckpro2_spawnfix_*.json
+# Locally retained experiment files are not part of the public distribution.
+/configs/auto_train/*.json
+!/configs/auto_train/openduckpro2_default.json
+/scripts/
+/tasks/
