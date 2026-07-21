@@ -1,155 +1,68 @@
-# OpenDuck Reward Challenge 协议
+# OpenDuckPro2 Reward Scale Challenge
 
-该协议是 Codex 主导 OpenDuckPro2 reward 修改时的强制流程。
+该协议用于挑战 OpenDuckPro2 的 reward scale 假设。当前训练合约冻结 reward 名称与公式，因此 challenge 不能授权新增、删除、重命名或改写 reward。
 
-## 负责人模型
+## 触发时机
 
-Codex 仍然是优化负责人。训练脚本只负责执行训练和评估。reward challenge subagent 是在 reward 源码修改前使用的独立批评者，用于挑战主 Codex 的修改假设。subagent 不决定最终训练动作，也不编辑 reward 文件，除非主 Codex 明确委托一个边界清晰的 patch。
+在创建新的 scale candidate 前，或 10K 评估显示摔倒、静止、拖脚、不交替、M 型抬腿、落脚冲击、速度偏差或动作饱和时，执行 challenge。
 
-## 触发条件
+1K 到 9K 是观察点，不单独产生换权重决策。除非出现 NaN、进程退出或 checkpoint 缺失，否则等待连续 10K 完成。
 
-在修改以下内容前，必须运行一次 reward challenge：
+## 必查证据
 
-- `legged_gym/envs/openduckpro2/openduckpro2_env.py`
-- `legged_gym/envs/openduckpro2/openduckpro2_config.py`
-- 任意 `_reward_*` 函数、reward 默认 scale、reward helper，或 reward 相关的 phase/contact/height 逻辑
+- candidate、slot、run、checkpoint 和 TensorBoard 路径是否一一对应。
+- `train.log`、`evaluate.log`、`evaluation.json`、`trajectory.csv` 和 `trajectory.svg`。
+- episode fall rate、base height、roll/pitch/yaw、速度跟踪和动作标准差。
+- 左右脚接触、摆动高度、同脚重复、双抬脚、拖脚和落脚速度。
+- 力矩、动作变化率、关节速度/加速度与饱和比例。
+- command、URDF、碰撞体、控制频率、PD 参数和 evaluator 是否可以解释现象。
 
-当完成的 rollout 有结构性失败，但 Codex 想避免源码修改、只做 scale-only 决策时，也必须运行 challenge。challenge 必须说明为什么 scale-only 是允许的。
+## 根因分类
 
-1K/2K 阶段的 gait failure 通常不足以触发源码修改 challenge，除非存在训练健康证据，例如 NaN、无 checkpoint、进程失败，或 reward 明显发散。1K/2K 阶段主要判断训练是否健康。
+challenge 必须把结论归入以下一种：
 
-## Challenge 必答问题
+- `scale_only_candidate`：步态结构存在，剩余问题可由一个 reward 权重族的小幅调整验证。
+- `continue_training`：证据尚未成熟，不修改参数并继续到 10K。
+- `non_reward_blocker`：URDF、碰撞、控制、观测、命令或评估器存在问题，禁止用 reward 掩盖。
+- `reward_contract_blocker`：既有 scale 无法表达所需约束；报告 blocker，不修改 reward 公式。
+- `insufficient_evidence`：artifact 不完整或相互冲突。
 
-每次 challenge 必须回答：
+## Scale 边界
 
-1. 检查了哪些 artifacts：`evaluation.json`、`trajectory.csv`、`trajectory.svg`、`train.log`、`evaluate.log`、simlog issues、checkpoint、milestone iteration。
-2. 失败现象是什么：fall、base height collapse、tilt、left/right non-alternation、same-foot repeats、foot dragging、foot-reference error、tracking error、energy、smoothness、action saturation、reward shortcut。
-3. 可能 root cause 属于 missing reward structure、wrong reward formula、coordinate/phase bug、scale imbalance，还是 training health。
-4. 哪个文件或 symbol 会改变：target file、reward function、config field、scale name。
-5. 为什么拒绝 scale-only，或为什么允许 scale-only。
-6. 预期行为变化是什么，下一轮哪些 artifacts 能验证。
-7. 副作用和风险是什么。
-8. 哪些反证会推翻拟议修改。
-9. 最终结论必须是以下之一：`source_change_required`、`scale_only_allowed`、`no_reward_change_continue`、`insufficient_evidence`。
-
-## 何时必须改源码
-
-出现以下证据时，不要只做 scale-only：
-
-- 左右脚不交替、同一只脚重复抬脚、同步 shuffle，或缺失 swing/contact sequence 约束。
-- base height collapse、蹲伏行走、fall gate，或 reward 行为导致的持续 tilt。
-- foot trajectory/reference mismatch 可能来自 frame、phase、reference-height 或 foot-index bug。
-- reward shortcut，例如原地站立、拖脚、过度接触，或 energy minimization 压制 gait。
-- 现有 reward 的 sign、normalization、mask、phase gate、coordinate frame 或左右脚 indexing 可能错误。
-- simlog 暴露缺失约束，例如 swing clearance、anti-drag、anti-double-contact 或 anti-tilt。
-- 3K/4K rollout 即使 scalar score 非零，仍然缺少有效 gait structure。
-
-只有 rollout 结构已经有效时，才允许 scale-only：没有 fall、存在左右交替、高度合理、foot reference 大致匹配，剩余问题只是 tracking、energy、smoothness 或 stability margin 的权重权衡。
-
-## Artifact 契约
-
-每次 challenge 都必须写入 candidate-local artifact：
+只允许以下已有非零项：
 
 ```text
-auto_train_runs/<run_id>/cycle_000/<candidate>/reward_challenge.json
+tracking_lin_vel tracking_ang_vel alive contact
+lin_vel_z ang_vel_xy orientation base_height torques dof_acc dof_vel
+action_rate dof_pos_limits hip_pos contact_no_vel feet_swing_height
 ```
 
-使用以下 schema 形状：
+正 reward 必须保持正值，penalty 必须保持负值，任何项不得设为零。每轮只修改一个权重族，并使用相同定义的双 seed 复验。
+
+稳定性优先于步态结构，步态结构优先于速度跟踪，速度跟踪优先于平滑性和能耗。
+
+## Challenge 记录
+
+每次 challenge 写入 candidate 本地 artifact：
 
 ```json
 {
-  "schema_version": "reward_challenge/v1",
-  "timestamp": "ISO-8601",
+  "schema_version": "reward_scale_challenge/v1",
   "run_id": "...",
-  "candidate_id": "...",
-  "milestone_iteration": 3000,
-  "checkpoint": "model_3000.pt",
-  "challenge_agent": {
-    "agent_type": "subagent",
-    "agent_id": "...",
-    "role": "reward_critic"
-  },
-  "source_files_under_review": [
-    "legged_gym/envs/openduckpro2/openduckpro2_env.py",
-    "legged_gym/envs/openduckpro2/openduckpro2_config.py"
-  ],
-  "input_artifacts": {
-    "evaluation_json": "...",
-    "trajectory_csv": "...",
-    "trajectory_svg": "...",
-    "train_log": "...",
-    "evaluate_log": "..."
-  },
-  "evidence_summary": {
-    "score": 0.0,
-    "fall_gate": false,
-    "base_height": "...",
-    "tilt": "...",
-    "left_right_alternation": "...",
-    "same_foot_repeats": "...",
-    "foot_reference_error": "...",
-    "velocity_tracking": "...",
-    "energy": "...",
-    "smoothness": "...",
-    "action_saturation": "..."
-  },
-  "diagnosis": {
-    "primary_failure": "...",
-    "root_cause_hypothesis": "...",
-    "scale_only_rejected_reason": "...",
-    "alternative_explanations": []
-  },
-  "proposed_reward_change": {
-    "decision": "source_change_required",
-    "target_file": "...",
-    "target_symbols": [],
-    "added_rewards": [],
-    "removed_rewards": [],
-    "modified_rewards": [],
-    "scale_changes": [],
-    "expected_behavior_change": "..."
-  },
+  "slot_id": "...",
+  "candidate_name": "...",
+  "milestone_iteration": 10000,
+  "checkpoint_path": ".../model_10000.pt",
+  "input_artifacts": [],
+  "observed_failure": "...",
+  "alternative_causes": [],
+  "decision": "scale_only_candidate",
+  "reward_family": "tracking",
+  "scale_delta": {},
+  "expected_change": "...",
   "falsification_checks": [],
-  "validation_plan": [],
-  "risk_notes": [],
-  "challenge_result": {
-    "approved_for_main_codex": true,
-    "confidence": "medium",
-    "required_before_editing": []
-  }
+  "risks": []
 }
 ```
 
-## Decision 引用
-
-任何 challenge 之后写入的 `codex_decision.json` 都必须包含：
-
-```json
-{
-  "reward_challenge": {
-    "artifact": "reward_challenge.json",
-    "decision": "source_change_required",
-    "candidate_id": "...",
-    "primary_failure": "...",
-    "scale_only_rejected_reason": "...",
-    "accepted_by_main_codex": true
-  }
-}
-```
-
-如果 Codex 拒绝 challenge，必须包含 `accepted_by_main_codex=false`，并写出明确的 `override_reason`。
-
-## Anti-Agreement 检查清单
-
-challenge 必须主动寻找不应该修改拟议 reward 的理由：
-
-- 这是否只是训练太早，尤其是 1K/2K？
-- checkpoint、evaluator、command sequence、terrain、initial state 或 termination config 是否可以解释这个现象？
-- 是否存在 scalar score 更低但 gait structure 更健康的 candidate？
-- 拟议 reward 是否可能制造原地站立、拖脚、过度抬脚或牺牲速度的 shortcut？
-- scale tuning 是否在掩盖 formula、frame 或 phase bug？
-- 删除或削弱某个 reward 是否会移除 stability、energy 或 smoothness 保护？
-- trajectory 和 simlog 是否冲突？如果冲突，标记为 `insufficient_evidence`。
-- 是否有更小的源码修改可以验证该假设？
-- 下一轮什么证据会证明这次 challenge 是错的？
-- 如果主 Codex 已经倾向某个修改，challenge 仍必须给出至少一个可测试的反论点。
+若结论是 `scale_only_candidate`，后续 candidate 仍必须先创建独立 draft PR，并通过配置校验后才能启动。

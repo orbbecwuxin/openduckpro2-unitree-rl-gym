@@ -5,7 +5,7 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
 CONDA_ENV="${CONDA_ENV:-openduck-unitree}"
-CONDA_SH="${CONDA_SH:-/data2/conda/etc/profile.d/conda.sh}"
+CONDA_SH="${CONDA_SH:-${HOME}/miniconda3/etc/profile.d/conda.sh}"
 GPU_ID="${GPU_ID:-0}"
 NUM_ENVS="${NUM_ENVS:-1}"
 RUN_NAME="${RUN_NAME:-openduckpro2_play}"
