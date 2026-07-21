@@ -74,9 +74,6 @@ class OpenDuckPro2RoughCfg(LeggedRobotCfg):
         flip_visual_attachments = False
 
     class commands(LeggedRobotCfg.commands):
-        heading_command = True
-        min_command_norm = 0.03
-
         class ranges(LeggedRobotCfg.commands.ranges):
             lin_vel_x = [-0.25, 0.25]
             lin_vel_y = [-0.18, 0.18]
