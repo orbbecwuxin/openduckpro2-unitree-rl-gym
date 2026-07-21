@@ -1,0 +1,47 @@
+{
+  "task": "openduckpro2",
+  "experiment_name": "openduckpro2",
+  "gpus": [0, 0, 1, 1],
+  "max_parallel_jobs": 4,
+  "workspace": {
+    "enabled": true,
+    "root": "auto_train_workspaces",
+    "snapshot_dirty_state": true
+  },
+  "cycles": 1,
+  "train": {
+    "num_envs": 128,
+    "max_iterations": 2,
+    "headless": true,
+    "python": "python"
+  },
+  "eval": {
+    "num_envs": 4,
+    "steps": 80,
+    "trajectory_stride": 10
+  },
+  "candidates": [
+    {
+      "name": "slot0_a",
+      "reward_scales": {}
+    },
+    {
+      "name": "slot0_b",
+      "reward_scales": {
+        "tracking_lin_vel": 1.1
+      }
+    },
+    {
+      "name": "slot1_a",
+      "reward_scales": {
+        "orientation": -1.1
+      }
+    },
+    {
+      "name": "slot1_b",
+      "reward_scales": {
+        "action_rate": -0.012
+      }
+    }
+  ]
+}

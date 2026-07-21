@@ -1,0 +1,82 @@
+{
+  "task": "openduckpro2",
+  "experiment_name": "openduckpro2",
+  "gpus": [0, 1],
+  "max_parallel_jobs": 2,
+  "workspace": {
+    "enabled": true,
+    "root": "auto_train_workspaces",
+    "snapshot_dirty_state": true
+  },
+  "cycles": null,
+  "control": {
+    "stop_files": []
+  },
+  "codex_control": {
+    "enabled": true,
+    "wait_for_decision": true,
+    "decision_filename": "codex_decision.json",
+    "heartbeat_interval_sec": 30,
+    "allow_auto_mutation_fallback": false
+  },
+  "streaming_candidates": {
+    "enabled": true,
+    "suggestions_per_completion": 1,
+    "prefer_codex_candidates": true
+  },
+  "termination": {
+    "score_target": 0.92,
+    "min_cycles": 4,
+    "patience_cycles": 3,
+    "min_delta": 0.005
+  },
+  "dynamic_iterations": {
+    "enabled": true,
+    "increment": 1000,
+    "max_iterations": 6000,
+    "score_threshold": 0.90,
+    "plateau_delta": 0.005
+  },
+  "train": {
+    "num_envs": 4096,
+    "max_iterations": 5000,
+    "headless": true,
+    "python": "python"
+  },
+  "eval": {
+    "num_envs": 32,
+    "steps": 1000,
+    "trajectory_stride": 10
+  },
+  "candidates": [
+    {
+      "name": "baseline",
+      "reward_scales": {}
+    },
+    {
+      "name": "track_forward",
+      "reward_scales": {
+        "tracking_lin_vel": 1.2,
+        "tracking_ang_vel": 0.6,
+        "contact": 0.22,
+        "action_rate": -0.012
+      }
+    },
+    {
+      "name": "stable_upright",
+      "reward_scales": {
+        "orientation": -1.3,
+        "base_height": -12.0,
+        "landing_foot_posture": 0.45
+      }
+    },
+    {
+      "name": "smooth_energy",
+      "reward_scales": {
+        "torques": -0.000015,
+        "dof_acc": -0.0000003,
+        "action_rate": -0.015
+      }
+    }
+  ]
+}

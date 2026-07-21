@@ -1,0 +1,596 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<robot name="open_duck_mini">
+  <link name="trunk_assembly">
+    <inertial>
+      <origin xyz="-0.0483259 -9.97823e-05 0.0384971" rpy="0 0 0"/>
+      <mass value="0.698526"/>
+      <inertia ixx="0.00167701" ixy="-1.31662e-05" ixz="-3.24953e-05" iyy="0.00344479" iyz="-2.15581e-06" izz="0.00292635"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.019 0 0.0648909" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="meshes/body_front.stl"/>
+      </geometry>
+      <material name="body_front_material">
+        <color rgba="0.917647 0.917647 0.917647 1"/>
+      </material>
+    </visual>
+    <visual>
+      <origin xyz="-0.019 3.46945e-18 0.0648909" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="meshes/body_back.stl"/>
+      </geometry>
+      <material name="body_back_material">
+        <color rgba="0.917647 0.917647 0.917647 1"/>
+      </material>
+    </visual>
+    <visual>
+      <origin xyz="-0.019 -3.46945e-18 0.0648909" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="meshes/body_middle_bottom.stl"/>
+      </geometry>
+      <material name="body_middle_bottom_material">
+        <color rgba="0.917647 0.917647 0.917647 1"/>
+      </material>
+    </visual>
+    <visual>
+      <origin xyz="-0.019 0 0.0648909" rpy="0 -0 0"/>
+      <geometry>
+        <mesh filename="meshes/body_middle_top.stl"/>
+      </geometry>
+      <material name="body_middle_top_material">
+        <color rgba="0.917647 0.917647 0.917647 1"/>
+      </material>
+    </visual>
+    <visual>
+      <origin xyz="-0.019 9.1073e-18 0.0648909" rpy="-0 -0 1.084202e-19"/>
+      <geometry>
+        <mesh filename="meshes/trunk_bottom.stl"/>
+      </geometry>
+      <material name="trunk_bottom_material">
+        <color rgba="0.180392 0.180392 0.180392 1"/>
+      </material>
+    </visual>
+    <visual>
+      <origin xyz="-0.019 -2.42428e-16 0.0648909" rpy="-9.64216e-17 -1.1071e-14 5.55112e-17"/>
+      <geometry>
+        <mesh filename="meshes/trunk_top.stl"/>
+      </geometry>
+      <material name="trunk_top_material">
+        <color rgba="0.180392 0.180392 0.180392 1"/>
+      </material>
+    </visual>
+  </link>
+  <link name="hip_roll_assembly">
+    <inertial>
+      <origin xyz="0.000795081 -5.46541e-06 -0.03306" rpy="0 0 0"/>
+      <mass value="0.06648"/>
+      <inertia ixx="2.44411e-05" ixy="2.35658e-09" ixz="-3.81059e-07" iyy="2.81818e-05" iyz="-7.50036e-09" izz="1.42687e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="-3.33067e-16 -0.035 0.01905" rpy="-8.76998e-16 4.4409e-16 -6.69604e-16"/>
+      <geometry>
+        <mesh filename="meshes/roll_motor_bottom.stl"/>
+      </geometry>
+      <material name="roll_motor_bottom_material">
+        <color rgba="0.647059 0.647059 0.647059 1"/>
+      </material>
+    </visual>
+    <visual>
+      <origin xyz="0 -0.035 0.01905" rpy="1.50222466548e-32 -3.60822e-16 -8.32668e-17"/>
+      <geometry>
+        <mesh filename="meshes/roll_motor_top.stl"/>
+      </geometry>
+      <material name="roll_motor_top_material">
+        <color rgba="0.901961 0.901961 0.901961 1"/>
+      </material>
+    </visual>
+  </link>
+  <link name="left_roll_to_pitch_assembly">
+    <inertial>
+      <origin xyz="0.0508042 -0.00041105 0.0204704" rpy="0 0 0"/>
+      <mass value="0.07516"/>
+      <inertia ixx="2.52335e-05" ixy="1.22133e-07" ixz="-5.90499e-07" iyy="4.13855e-05" iyz="-1.07544e-07" izz="2.8127e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.035 -0.065 0.01905" rpy="1.57079632679 1.57079632679 0"/>
+      <geometry>
+        <mesh filename="meshes/left_roll_to_pitch.stl"/>
+      </geometry>
+      <material name="left_roll_to_pitch_material">
+        <color rgba="0.909804 0.572549 0.164706 1"/>
+      </material>
+    </visual>
+  </link>
+  <link name="knee_and_ankle_assembly">
+    <inertial>
+      <origin xyz="0.00253369 -0.0390636 0.0102776" rpy="0 0 0"/>
+      <mass value="0.12407"/>
+      <inertia ixx="0.000211406" ixy="-2.68706e-05" ixz="3.81906e-06" iyy="7.83759e-05" iyz="2.08009e-05" izz="0.000225619"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.01606 0.065 0.10915" rpy="-1.57079632679 1.28669069886e-15 3.44635253222e-16"/>
+      <geometry>
+        <mesh filename="meshes/left_cache.stl"/>
+      </geometry>
+      <material name="left_cache_material">
+        <color rgba="0.917647 0.917647 0.917647 1"/>
+      </material>
+    </visual>
+    <visual>
+      <origin xyz="0.01606 0.14365 0.10925" rpy="-1.57079632679 1.31207582445e-15 3.70020378811e-16"/>
+      <geometry>
+        <mesh filename="meshes/leg_spacer.stl"/>
+      </geometry>
+      <material name="leg_spacer_material">
+        <color rgba="0.647059 0.647059 0.647059 1"/>
+      </material>
+    </visual>
+    <visual>
+      <origin xyz="0.01606 0.14365 0.10915" rpy="-1.57079632679 -8.39762581901e-24 -8.39762581901e-24"/>
+      <geometry>
+        <mesh filename="meshes/left_knee_to_ankle_right_sheet.stl"/>
+      </geometry>
+      <material name="left_knee_to_ankle_right_sheet_material">
+        <color rgba="0.223529 0.219608 0.219608 1"/>
+      </material>
+    </visual>
+    <visual>
+      <origin xyz="0.01606 0.14365 0.10915" rpy="-1.57079632679 7.25382438584e-30 7.25382438584e-30"/>
+      <geometry>
+        <mesh filename="meshes/left_knee_to_ankle_left_sheet.stl"/>
+      </geometry>
+      <material name="left_knee_to_ankle_left_sheet_material">
+        <color rgba="0.223529 0.219608 0.219608 1"/>
+      </material>
+    </visual>
+  </link>
+  <link name="knee_and_ankle_assembly_2">
+    <inertial>
+      <origin xyz="5.01859e-06 -0.0577465 0.0181136" rpy="0 0 0"/>
+      <mass value="0.07259"/>
+      <inertia ixx="4.99575e-05" ixy="1.03817e-08" ixz="2.25175e-09" iyy="1.87273e-05" iyz="8.81049e-08" izz="4.23932e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.01606 0.14365 0.10925" rpy="-1.57079632679 1.28123749305e-15 3.39182047413e-16"/>
+      <geometry>
+        <mesh filename="meshes/leg_spacer.stl"/>
+      </geometry>
+      <material name="leg_spacer_material"/>
+    </visual>
+    <visual>
+      <origin xyz="0.01606 0.14365 0.10915" rpy="-1.57079632679 1.88258636953e-24 1.88258636953e-24"/>
+      <geometry>
+        <mesh filename="meshes/left_knee_to_ankle_right_sheet.stl"/>
+      </geometry>
+      <material name="left_knee_to_ankle_right_sheet_material"/>
+    </visual>
+    <visual>
+      <origin xyz="0.01606 0.14365 0.10915" rpy="-1.57079632679 -7.59068995216e-30 -7.59068995216e-30"/>
+      <geometry>
+        <mesh filename="meshes/left_knee_to_ankle_left_sheet.stl"/>
+      </geometry>
+      <material name="left_knee_to_ankle_left_sheet_material"/>
+    </visual>
+  </link>
+  <link name="foot_assembly">
+    <inertial>
+      <origin xyz="0.0110718 -0.0246608 0.0190626" rpy="0 0 0"/>
+      <mass value="0.07524"/>
+      <inertia ixx="1.87482e-05" ixy="1.58839e-06" ixz="-6.52354e-09" iyy="6.74427e-05" iyz="5.67391e-08" izz="6.061e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.01606 0.2223 0.10905" rpy="-1.57079632679 -6.53258983435e-30 -6.53258983435e-30"/>
+      <geometry>
+        <mesh filename="meshes/foot_side.stl"/>
+      </geometry>
+      <material name="foot_side_material">
+        <color rgba="0.980392 0.713725 0.00392157 1"/>
+      </material>
+    </visual>
+    <visual>
+      <origin xyz="0.01656 0.2228 0.10955" rpy="-1.57079632679 2.43946107166e-18 2.43946107166e-18"/>
+      <geometry>
+        <mesh filename="meshes/foot_bottom_tpu.stl"/>
+      </geometry>
+      <material name="foot_bottom_tpu_material">
+        <color rgba="0.305882 0.298039 0.278431 1"/>
+      </material>
+    </visual>
+    <visual>
+      <origin xyz="0.01656 0.2228 0.10955" rpy="-1.57079632679 2.43946107166e-18 2.43946107166e-18"/>
+      <geometry>
+        <mesh filename="meshes/foot_bottom_pla.stl"/>
+      </geometry>
+      <material name="foot_bottom_pla_material">
+        <color rgba="0.305882 0.298039 0.278431 1"/>
+      </material>
+    </visual>
+    <visual>
+      <origin xyz="0.01606 0.2223 0.10905" rpy="-1.57079632679 -6.53258983435e-30 -6.53258983435e-30"/>
+      <geometry>
+        <mesh filename="meshes/foot_top.stl"/>
+      </geometry>
+      <material name="foot_top_material">
+        <color rgba="0.980392 0.713725 0.00392157 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.01656 0.2228 0.10955" rpy="-1.57079632679 2.43946107166e-18 2.43946107166e-18"/>
+      <geometry>
+        <mesh filename="meshes/foot_bottom_tpu.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="neck_pitch_assembly">
+    <inertial>
+      <origin xyz="-5.63137e-06 0.0492968 0.0181786" rpy="0 0 0"/>
+      <mass value="0.06618"/>
+      <inertia ixx="3.49456e-05" ixy="8.75633e-09" ixz="-2.15592e-09" iyy="1.70231e-05" iyz="-1.85188e-08" izz="2.80043e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.02 -0.02511 0.01905" rpy="-1.57079632679 -7.27230815138e-31 -7.27230815138e-31"/>
+      <geometry>
+        <mesh filename="meshes/neck_left_sheet.stl"/>
+      </geometry>
+      <material name="neck_left_sheet_material">
+        <color rgba="0.223529 0.219608 0.219608 1"/>
+      </material>
+    </visual>
+    <visual>
+      <origin xyz="-0.02 -0.02511 0.01905" rpy="-1.57079632679 4.3344500903e-17 4.3344500903e-17"/>
+      <geometry>
+        <mesh filename="meshes/neck_right_sheet.stl"/>
+      </geometry>
+      <material name="neck_right_sheet_material">
+        <color rgba="0.223529 0.219608 0.219608 1"/>
+      </material>
+    </visual>
+  </link>
+  <link name="head_pitch_to_yaw">
+    <inertial>
+      <origin xyz="-0.00766247 0.026015 0.0186681" rpy="0 0 0"/>
+      <mass value="0.0169378"/>
+      <inertia ixx="9.43036e-06" ixy="1.35195e-06" ixz="3.05899e-08" iyy="4.64763e-06" iyz="-8.42802e-08" izz="8.02915e-06"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.02 -0.09111 0.01905" rpy="-1.57079632679 2.57589021181e-39 2.57589021181e-39"/>
+      <geometry>
+        <mesh filename="meshes/head_pitch_to_yaw.stl"/>
+      </geometry>
+      <material name="head_pitch_to_yaw_material">
+        <color rgba="0.4 0.4 0.4 1"/>
+      </material>
+    </visual>
+  </link>
+  <link name="neck_yaw_assembly">
+    <inertial>
+      <origin xyz="0.00412907 3.95745e-06 -0.0222828" rpy="0 0 0"/>
+      <mass value="0.0918099"/>
+      <inertia ixx="3.11706e-05" ixy="4.29429e-09" ixz="-4.41251e-06" iyy="6.94935e-05" iyz="-3.82028e-09" izz="7.04025e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.02 1.4985e-16 -0.14821" rpy="1.387778e-17 -1.110224e-16 1.409228e-16"/>
+      <geometry>
+        <mesh filename="meshes/head_yaw_to_roll.stl"/>
+      </geometry>
+      <material name="head_yaw_to_roll_material">
+        <color rgba="0.647059 0.647059 0.647059 1"/>
+      </material>
+    </visual>
+  </link>
+  <link name="head_assembly">
+    <inertial>
+      <origin xyz="0.00815416 -0.00390754 0.0227726" rpy="0 0 0"/>
+      <mass value="0.406607"/>
+      <inertia ixx="0.00244627" ixy="-2.02404e-06" ixz="9.2382e-05" iyy="0.0016864" iyz="-1.84944e-05" izz="0.00108002"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.12906 -2.4549e-16 0.06095" rpy="-4.75616985831e-15 1.57079632679 0"/>
+      <geometry>
+        <mesh filename="meshes/right_antenna_holder.stl"/>
+      </geometry>
+      <material name="right_antenna_holder_material">
+        <color rgba="0.980392 0.713725 0.00392157 1"/>
+      </material>
+    </visual>
+    <visual>
+      <origin xyz="-0.0830595 0.182212 0.06095" rpy="0.494709213063 1.57079632679 0"/>
+      <geometry>
+        <mesh filename="meshes/antenna.stl"/>
+      </geometry>
+      <material name="antenna_material">
+        <color rgba="0.647059 0.647059 0.647059 1"/>
+      </material>
+    </visual>
+    <visual>
+      <origin xyz="-0.12808 0.000247519 0.06095" rpy="-5.19944647698e-15 1.57079632679 0"/>
+      <geometry>
+        <mesh filename="meshes/antenna.stl"/>
+      </geometry>
+      <material name="antenna_material"/>
+    </visual>
+    <visual>
+      <origin xyz="-0.12906 3.26887e-17 0.06095" rpy="-4.06654155595e-15 1.57079632679 0"/>
+      <geometry>
+        <mesh filename="meshes/left_antenna_holder.stl"/>
+      </geometry>
+      <material name="left_antenna_holder_material">
+        <color rgba="0.980392 0.713725 0.00392157 1"/>
+      </material>
+    </visual>
+    <visual>
+      <origin xyz="-0.12906 1.72388e-17 0.06095" rpy="-3.94349087196e-16 1.57079632679 0"/>
+      <geometry>
+        <mesh filename="meshes/head_bot_sheet.stl"/>
+      </geometry>
+      <material name="head_bot_sheet_material">
+        <color rgba="0.411765 0.411765 0.411765 1"/>
+      </material>
+    </visual>
+    <visual>
+      <origin xyz="-0.12906 1.92717e-17 0.06095" rpy="-4.27713203235e-16 1.57079632679 0"/>
+      <geometry>
+        <mesh filename="meshes/head.stl"/>
+      </geometry>
+      <material name="head_material">
+        <color rgba="0.917647 0.917647 0.917647 1"/>
+      </material>
+    </visual>
+  </link>
+  <link name="hip_roll_assembly_2">
+    <inertial>
+      <origin xyz="0.000795081 -5.46541e-06 -0.03306" rpy="0 0 0"/>
+      <mass value="0.06648"/>
+      <inertia ixx="2.44411e-05" ixy="2.35658e-09" ixz="-3.81059e-07" iyy="2.81818e-05" iyz="-7.50036e-09" izz="1.42687e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="-3.64292e-16 -0.035 0.01905" rpy="0 -0 -3.05312e-16"/>
+      <geometry>
+        <mesh filename="meshes/roll_motor_bottom.stl"/>
+      </geometry>
+      <material name="roll_motor_bottom_material"/>
+    </visual>
+    <visual>
+      <origin xyz="3.46945e-18 -0.035 0.01905" rpy="-4.930375998e-32 4.4409e-16 -2.22044e-16"/>
+      <geometry>
+        <mesh filename="meshes/roll_motor_top.stl"/>
+      </geometry>
+      <material name="roll_motor_top_material"/>
+    </visual>
+  </link>
+  <link name="right_roll_to_pitch_assembly">
+    <inertial>
+      <origin xyz="-0.0508042 -0.000420742 0.0204704" rpy="0 0 0"/>
+      <mass value="0.07516"/>
+      <inertia ixx="2.52329e-05" ixy="-1.30528e-07" ixz="5.90499e-07" iyy="4.13855e-05" iyz="-9.13427e-08" izz="2.81264e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.035 -0.065 0.01905" rpy="1.57079632679 1.57079632679 0"/>
+      <geometry>
+        <mesh filename="meshes/right_roll_to_pitch.stl"/>
+      </geometry>
+      <material name="right_roll_to_pitch_material">
+        <color rgba="0.909804 0.572549 0.164706 1"/>
+      </material>
+    </visual>
+  </link>
+  <link name="knee_and_ankle_assembly_3">
+    <inertial>
+      <origin xyz="0.00253369 0.0390636 0.010809" rpy="0 0 0"/>
+      <mass value="0.12407"/>
+      <inertia ixx="0.000212363" ixy="2.68706e-05" ixz="3.9656e-06" iyy="7.93324e-05" iyz="-2.17407e-05" izz="0.000225619"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.01606 -0.065 0.1092" rpy="1.57079632679 8.40834555449e-17 -1.02613890118e-15"/>
+      <geometry>
+        <mesh filename="meshes/right_cache.stl"/>
+      </geometry>
+      <material name="right_cache_material">
+        <color rgba="0.917647 0.917647 0.917647 1"/>
+      </material>
+    </visual>
+    <visual>
+      <origin xyz="0.01606 -0.14365 -0.07215" rpy="1.57079632679 8.40834555449e-17 -1.02613890118e-15"/>
+      <geometry>
+        <mesh filename="meshes/leg_spacer.stl"/>
+      </geometry>
+      <material name="leg_spacer_material"/>
+    </visual>
+    <visual>
+      <origin xyz="0.01606 -0.14365 -0.07205" rpy="1.57079632679 2.46996564876e-29 -2.46996564876e-29"/>
+      <geometry>
+        <mesh filename="meshes/left_knee_to_ankle_right_sheet.stl"/>
+      </geometry>
+      <material name="left_knee_to_ankle_right_sheet_material"/>
+    </visual>
+    <visual>
+      <origin xyz="0.01606 -0.14365 -0.07205" rpy="1.57079632679 4.6196685933e-25 -4.6196685933e-25"/>
+      <geometry>
+        <mesh filename="meshes/left_knee_to_ankle_left_sheet.stl"/>
+      </geometry>
+      <material name="left_knee_to_ankle_left_sheet_material"/>
+    </visual>
+  </link>
+  <link name="knee_and_ankle_assembly_4">
+    <inertial>
+      <origin xyz="5.01859e-06 -0.0577465 0.0181136" rpy="0 0 0"/>
+      <mass value="0.07259"/>
+      <inertia ixx="4.99575e-05" ixy="1.03817e-08" ixz="2.25175e-09" iyy="1.87273e-05" iyz="8.81049e-08" izz="4.23932e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.01606 0.14365 0.10925" rpy="-1.57079632679 8.40834555449e-17 1.02613890118e-15"/>
+      <geometry>
+        <mesh filename="meshes/leg_spacer.stl"/>
+      </geometry>
+      <material name="leg_spacer_material"/>
+    </visual>
+    <visual>
+      <origin xyz="0.01606 0.14365 0.10915" rpy="-1.57079632679 -3.55253165363e-22 -3.55253165363e-22"/>
+      <geometry>
+        <mesh filename="meshes/left_knee_to_ankle_right_sheet.stl"/>
+      </geometry>
+      <material name="left_knee_to_ankle_right_sheet_material"/>
+    </visual>
+    <visual>
+      <origin xyz="0.01606 0.14365 0.10915" rpy="-1.57079632679 7.65942071002e-30 7.65942071002e-30"/>
+      <geometry>
+        <mesh filename="meshes/left_knee_to_ankle_left_sheet.stl"/>
+      </geometry>
+      <material name="left_knee_to_ankle_left_sheet_material"/>
+    </visual>
+  </link>
+  <link name="foot_assembly_2">
+    <inertial>
+      <origin xyz="0.0110718 -0.0246608 0.0190626" rpy="0 0 0"/>
+      <mass value="0.07524"/>
+      <inertia ixx="1.87482e-05" ixy="1.58839e-06" ixz="-6.52354e-09" iyy="6.74427e-05" iyz="5.67391e-08" izz="6.061e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.01606 0.2223 0.10905" rpy="-1.57079632679 -1.21878866989e-29 -1.21878866989e-29"/>
+      <geometry>
+        <mesh filename="meshes/foot_side.stl"/>
+      </geometry>
+      <material name="foot_side_material"/>
+    </visual>
+    <visual>
+      <origin xyz="0.01656 0.2228 0.10955" rpy="-1.57079632679 -1.21878866989e-29 -1.21878866989e-29"/>
+      <geometry>
+        <mesh filename="meshes/foot_bottom_tpu.stl"/>
+      </geometry>
+      <material name="foot_bottom_tpu_material"/>
+    </visual>
+    <visual>
+      <origin xyz="0.01656 0.2228 0.10955" rpy="-1.57079632679 -1.21878866989e-29 -1.21878866989e-29"/>
+      <geometry>
+        <mesh filename="meshes/foot_bottom_pla.stl"/>
+      </geometry>
+      <material name="foot_bottom_pla_material"/>
+    </visual>
+    <visual>
+      <origin xyz="0.01606 0.2223 0.10905" rpy="-1.57079632679 -1.21878866989e-29 -1.21878866989e-29"/>
+      <geometry>
+        <mesh filename="meshes/foot_top.stl"/>
+      </geometry>
+      <material name="foot_top_material"/>
+    </visual>
+    <collision>
+      <origin xyz="0.01656 0.2228 0.10955" rpy="-1.57079632679 -1.21878866989e-29 -1.21878866989e-29"/>
+      <geometry>
+        <mesh filename="meshes/foot_bottom_tpu.stl"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="left_hip_yaw" type="revolute">
+    <parent link="trunk_assembly"/>
+    <child link="hip_roll_assembly"/>
+    <origin xyz="-0.019 0.035 0.0459409" rpy="-2.35326e-16 -2.18714e-14 5.55112e-17"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.523598775598" upper="0.523598775598" effort="3.23" velocity="5.24"/>
+    <dynamics damping="0.0" friction="0.0"/>
+  </joint>
+  <joint name="left_hip_roll" type="revolute">
+    <parent link="hip_roll_assembly"/>
+    <child link="left_roll_to_pitch_assembly"/>
+    <origin xyz="0.01905 4.61436e-15 -0.046015" rpy="-1.57079632679 -0 1.57079632679"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.436332312999" upper="0.436332312999" effort="3.23" velocity="5.24"/>
+    <dynamics damping="0.0" friction="0.0"/>
+  </joint>
+  <joint name="left_hip_pitch" type="revolute">
+    <parent link="left_roll_to_pitch_assembly"/>
+    <child link="knee_and_ankle_assembly"/>
+    <origin xyz="0.07415 -3.25261e-17 0.03511" rpy="3.14159265359 1.57079632679 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.2217304764" upper="0.523598775598" effort="3.23" velocity="5.24"/>
+    <dynamics damping="0.0" friction="0.0"/>
+  </joint>
+  <joint name="left_knee" type="revolute">
+    <parent link="knee_and_ankle_assembly"/>
+    <child link="knee_and_ankle_assembly_2"/>
+    <origin xyz="0 -0.07865 0.0001" rpy="2.22044e-16 2.22044e-16 -5.29395999753e-23"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.57079632679" upper="1.57079632679" effort="3.23" velocity="5.24"/>
+    <dynamics damping="0.0" friction="0.0"/>
+  </joint>
+  <joint name="left_ankle" type="revolute">
+    <parent link="knee_and_ankle_assembly_2"/>
+    <child link="foot_assembly"/>
+    <origin xyz="1.8735e-16 -0.07865 0.0001" rpy="5.55112e-16 1.110224e-15 3.05312e-16"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.57079632679" upper="1.57079632679" effort="3.23" velocity="5.24"/>
+    <dynamics damping="0.0" friction="0.0"/>
+  </joint>
+  <joint name="neck_pitch" type="revolute">
+    <parent link="trunk_assembly"/>
+    <child link="neck_pitch_assembly"/>
+    <origin xyz="0.001 0.01915 0.0900009" rpy="1.57079632679 -2.2177449806e-14 -1.17846379685e-16"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.349065850399" upper="1.1344640138" effort="3.23" velocity="5.24"/>
+    <dynamics damping="0.0" friction="0.0"/>
+  </joint>
+  <joint name="head_pitch" type="revolute">
+    <parent link="neck_pitch_assembly"/>
+    <child link="head_pitch_to_yaw"/>
+    <origin xyz="-2.9924e-17 0.066 -6.93889e-18" rpy="-3.4406e-16 3.803686518e-33 2.21106e-17"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.785398163397" upper="0.785398163397" effort="3.23" velocity="5.24"/>
+    <dynamics damping="0.0" friction="0.0"/>
+  </joint>
+  <joint name="head_yaw" type="revolute">
+    <parent link="head_pitch_to_yaw"/>
+    <child link="neck_yaw_assembly"/>
+    <origin xyz="-4.33681e-19 0.057 0.01905" rpy="-1.57079632679 7.37420220702e-17 -2.40275517001e-16"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-2.79252680319" upper="2.79252680319" effort="3.23" velocity="5.24"/>
+    <dynamics damping="0.0" friction="0.0"/>
+  </joint>
+  <joint name="head_roll" type="revolute">
+    <parent link="neck_yaw_assembly"/>
+    <child link="head_assembly"/>
+    <origin xyz="0.04095 2.1764e-16 -0.01915" rpy="3.80989015807e-16 -1.57079632679 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.523598775598" upper="0.523598775598" effort="3.23" velocity="5.24"/>
+    <dynamics damping="0.0" friction="0.0"/>
+  </joint>
+  <joint name="right_hip_yaw" type="revolute">
+    <parent link="trunk_assembly"/>
+    <child link="hip_roll_assembly_2"/>
+    <origin xyz="-0.019 -0.035 0.0459409" rpy="-8.50828e-16 -2.14274e-14 5.55112e-17"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.523598775598" upper="0.523598775598" effort="3.23" velocity="5.24"/>
+    <dynamics damping="0.0" friction="0.0"/>
+  </joint>
+  <joint name="right_hip_roll" type="revolute">
+    <parent link="hip_roll_assembly_2"/>
+    <child link="right_roll_to_pitch_assembly"/>
+    <origin xyz="0.01905 4.05787e-14 -0.046015" rpy="-1.57079632679 -0 1.57079632679"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.436332312999" upper="0.436332312999" effort="3.23" velocity="5.24"/>
+    <dynamics damping="0.0" friction="0.0"/>
+  </joint>
+  <joint name="right_hip_pitch" type="revolute">
+    <parent link="right_roll_to_pitch_assembly"/>
+    <child link="knee_and_ankle_assembly_3"/>
+    <origin xyz="-0.07415 2.48437e-15 0.03511" rpy="3.14019861056e-16 1.57079632679 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.523598775598" upper="1.2217304764" effort="3.23" velocity="5.24"/>
+    <dynamics damping="0.0" friction="0.0"/>
+  </joint>
+  <joint name="right_knee" type="revolute">
+    <parent link="knee_and_ankle_assembly_3"/>
+    <child link="knee_and_ankle_assembly_4"/>
+    <origin xyz="1.38778e-16 0.07865 0.037" rpy="3.14159265359 -7.10692e-22 -2.20667999999e-26"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.57079632679" upper="1.57079632679" effort="3.23" velocity="5.24"/>
+    <dynamics damping="0.0" friction="0.0"/>
+  </joint>
+  <joint name="right_ankle" type="revolute">
+    <parent link="knee_and_ankle_assembly_4"/>
+    <child link="foot_assembly_2"/>
+    <origin xyz="1.32533e-15 -0.07865 0.0001" rpy="7.77156e-16 -6.66134e-16 1.110222e-15"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.57079632679" upper="1.57079632679" effort="3.23" velocity="5.24"/>
+    <dynamics damping="0.0" friction="0.0"/>
+  </joint>
+</robot>

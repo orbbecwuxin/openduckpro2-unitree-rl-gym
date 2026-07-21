@@ -1,0 +1,24 @@
+{
+  "task": "openduckpro2",
+  "experiment_name": "openduckpro2",
+  "gpus": [1],
+  "max_parallel_jobs": 1,
+  "cycles": 1,
+  "train": {
+    "num_envs": 128,
+    "max_iterations": 2,
+    "headless": true,
+    "python": "python"
+  },
+  "eval": {
+    "num_envs": 4,
+    "steps": 80,
+    "trajectory_stride": 10
+  },
+  "candidates": [
+    {
+      "name": "baseline_smoke",
+      "reward_scales": {}
+    }
+  ]
+}
