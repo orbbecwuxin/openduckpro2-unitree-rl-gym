@@ -1,4 +1,5 @@
 import json
+import math
 import os
 import re
 import subprocess
@@ -7,6 +8,7 @@ from pathlib import Path
 
 
 MODEL_RE = re.compile(r"model_(\d+)\.pt$")
+COMMAND_RANGE_NAMES = ("lin_vel_x", "lin_vel_y", "ang_vel_yaw")
 
 
 def repo_root_from_script(script_file):
@@ -57,6 +59,49 @@ def apply_reward_overrides(env_cfg, override_path=None, overrides=None):
             raise ValueError(f"Unknown reward scale: {name}")
         setattr(env_cfg.rewards.scales, name, float(value))
     return reward_scales
+
+
+def normalize_command_ranges(command_ranges):
+    command_ranges = command_ranges or {}
+    if not isinstance(command_ranges, dict):
+        raise ValueError("command_ranges must be an object")
+    unknown = sorted(set(command_ranges) - set(COMMAND_RANGE_NAMES))
+    if unknown:
+        raise ValueError("Unknown command ranges: " + ", ".join(unknown))
+
+    normalized = {}
+    for name, bounds in command_ranges.items():
+        if not isinstance(bounds, (list, tuple)) or len(bounds) != 2:
+            raise ValueError(f"Command range {name} must contain [lower, upper]")
+        lower, upper = (float(bounds[0]), float(bounds[1]))
+        if not math.isfinite(lower) or not math.isfinite(upper):
+            raise ValueError(f"Command range {name} must contain finite values")
+        if lower > upper:
+            raise ValueError(f"Command range {name} has lower > upper")
+        normalized[name] = [lower, upper]
+    return normalized
+
+
+def apply_command_overrides(env_cfg, override_path=None, overrides=None):
+    if overrides is None:
+        overrides = load_json(override_path, default={}) or {}
+    command_ranges = overrides.get("command_ranges")
+    if command_ranges is None:
+        command_ranges = overrides.get("commands", {}).get("ranges", {})
+    command_ranges = normalize_command_ranges(command_ranges)
+    for name, bounds in command_ranges.items():
+        if not hasattr(env_cfg.commands.ranges, name):
+            raise ValueError(f"Task does not define command range: {name}")
+        setattr(env_cfg.commands.ranges, name, list(bounds))
+    return command_ranges
+
+
+def read_command_ranges(env_cfg):
+    return {
+        name: [float(value) for value in getattr(env_cfg.commands.ranges, name)]
+        for name in COMMAND_RANGE_NAMES
+        if hasattr(env_cfg.commands.ranges, name)
+    }
 
 
 def latest_run_dir(log_root, run_name=None, min_mtime=0.0):

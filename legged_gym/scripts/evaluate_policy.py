@@ -9,7 +9,12 @@ import torch
 from legged_gym.envs import *  # noqa: F401,F403
 from legged_gym.utils import get_args, task_registry
 
-from auto_train_common import apply_reward_overrides, load_json, write_json
+from auto_train_common import (
+    apply_command_overrides,
+    apply_reward_overrides,
+    load_json,
+    write_json,
+)
 
 
 DEFAULT_COMMAND_PLAN = [
@@ -49,6 +54,7 @@ CONTACT_DEBOUNCE_SECONDS = 0.06
 def parse_custom_args(argv):
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument("--reward-overrides")
+    parser.add_argument("--command-overrides")
     parser.add_argument("--output", required=True)
     parser.add_argument("--command-plan")
     parser.add_argument("--score-config")
@@ -1030,6 +1036,7 @@ def evaluate(args, custom):
     env_cfg.env.test = False
     env_cfg.commands.resampling_time = 1e9
     apply_reward_overrides(env_cfg, custom.reward_overrides)
+    apply_command_overrides(env_cfg, custom.command_overrides)
 
     env, _ = task_registry.make_env(name=args.task, args=args, env_cfg=env_cfg)
     obs = actor_obs(env.get_observations())
