@@ -6,9 +6,6 @@ class OpenDuckPro3RoughCfg(LeggedRobotCfg):
 
     class init_state(LeggedRobotCfg.init_state):
         pos = [0.0, 0.0, 0.347]
-        dof_pos_noise = 0.0
-        root_xy_noise = 0.0
-        root_vel_noise = 0.0
         default_joint_angles = {
             "left_leg_yaw_joint": 0.0,
             "left_leg_roll_joint": 0.0,
