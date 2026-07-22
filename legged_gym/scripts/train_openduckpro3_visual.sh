@@ -4,71 +4,23 @@ set -euo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd -- "${SCRIPT_DIR}/../.." && pwd)"
 
-# Defaults can be changed here or overridden with command-line options.
-CONDA_ENV="${CONDA_ENV:-/data2/conda/envs/openduck-unitree}"
-PYTHON="${PYTHON:-${CONDA_ENV}/bin/python}"
-PHYSICAL_GPU="${PHYSICAL_GPU:-1}"
-DISPLAY_ID="${DISPLAY:-:1}"
-NUM_ENVS="${NUM_ENVS:-4096}"
-MAX_ITERATIONS="${MAX_ITERATIONS:-10000}"
-SEED="${SEED:-1}"
-RUN_NAME="${RUN_NAME:-manual_visual_openduckpro3_$(date +%Y%m%d_%H%M%S)}"
+# ======================== EDITABLE CONFIG ========================
+# Change these values, then run this script without extra arguments.
+CONDA_ENV="/data2/conda/envs/openduck-unitree"
+PHYSICAL_GPU=1
+DISPLAY_ID=":1"
+NUM_ENVS=4096
+MAX_ITERATIONS=10000
+SEED=1
+RUN_NAME="manual_visual_openduckpro3"
+# ================================================================
 
-usage() {
-  cat <<'EOF'
-Usage: train_openduckpro3_visual.sh [options]
+PYTHON="${CONDA_ENV}/bin/python"
 
-Options:
-  --gpu ID             Physical GPU exposed to the process (default: 1).
-  --display DISPLAY    X11 display used by the Isaac Gym viewer (default: :1).
-  --num-envs COUNT     Parallel environments (default: 4096).
-  --iterations COUNT   Training iterations (default: 10000).
-  --seed SEED          Random seed (default: 1).
-  --run-name NAME      TensorBoard/checkpoint run name.
-  -h, --help           Show this help.
-
-The selected physical GPU is exposed as logical cuda:0 inside the process.
-The script intentionally does not pass --headless.
-EOF
-}
-
-while (($#)); do
-  case "$1" in
-    --gpu)
-      PHYSICAL_GPU="${2:?--gpu requires an ID}"
-      shift 2
-      ;;
-    --display)
-      DISPLAY_ID="${2:?--display requires a value such as :1}"
-      shift 2
-      ;;
-    --num-envs)
-      NUM_ENVS="${2:?--num-envs requires a count}"
-      shift 2
-      ;;
-    --iterations)
-      MAX_ITERATIONS="${2:?--iterations requires a count}"
-      shift 2
-      ;;
-    --seed)
-      SEED="${2:?--seed requires a value}"
-      shift 2
-      ;;
-    --run-name)
-      RUN_NAME="${2:?--run-name requires a value}"
-      shift 2
-      ;;
-    -h|--help)
-      usage
-      exit 0
-      ;;
-    *)
-      printf 'Unknown argument: %s\n' "$1" >&2
-      usage >&2
-      exit 2
-      ;;
-  esac
-done
+if (($#)); then
+  printf 'This script uses the EDITABLE CONFIG block. Edit the file and run it without arguments.\n' >&2
+  exit 2
+fi
 
 if [[ ! "${PHYSICAL_GPU}" =~ ^[0-9]+$ ]]; then
   printf 'GPU ID must be a non-negative integer: %s\n' "${PHYSICAL_GPU}" >&2
