@@ -66,9 +66,9 @@ class OpenDuckPro2RoughCfg(LeggedRobotCfg):
 
     class commands(LeggedRobotCfg.commands):
         class ranges(LeggedRobotCfg.commands.ranges):
-            lin_vel_x = [-0.25, 0.25]
+            lin_vel_x = [-0.45, 0.45]
             lin_vel_y = [-0.18, 0.18]
-            ang_vel_yaw = [-0.156, 0.156]
+            ang_vel_yaw = [-0.36, 0.36]
 
     class rewards(LeggedRobotCfg.rewards):
         soft_dof_pos_limit = 0.9
@@ -82,7 +82,7 @@ class OpenDuckPro2RoughCfg(LeggedRobotCfg):
             ang_vel_xy = -0.05
             orientation = -1.0
             base_height = -10.0
-            torques = -0.00001
+            # torques = -0.00001
             dof_acc = -2.5e-7
             dof_vel = -1e-3
             feet_air_time = 0.0
