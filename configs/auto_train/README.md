@@ -6,6 +6,11 @@ Each candidate must run as one process, one `run_name`, one log directory, and o
 
 Only existing nonzero reward scales may be overridden. Do not place host paths, checkpoints, logs, tokens, or generated PR metadata from completed experiments in this repository.
 
+For a controlled command-distribution experiment, a candidate may also provide
+`command_ranges`. This changes command sampling only; it does not change the G1
+reward contract. A fixed forward command uses identical lower and upper bounds:
+`"lin_vel_x": [0.3, 0.3]`.
+
 Candidate shape:
 
 ```json
@@ -14,6 +19,11 @@ Candidate shape:
   "seed": 1,
   "reward_scales": {
     "tracking_lin_vel": 1.0
+  },
+  "command_ranges": {
+    "lin_vel_x": [0.3, 0.3],
+    "lin_vel_y": [0.0, 0.0],
+    "ang_vel_yaw": [0.0, 0.0]
   },
   "training_pr": {
     "repo": "orbbecwuxin/openduck-training-control",
