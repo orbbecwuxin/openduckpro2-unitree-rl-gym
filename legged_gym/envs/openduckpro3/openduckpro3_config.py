@@ -9,13 +9,13 @@ class OpenDuckPro3RoughCfg(LeggedRobotCfg):
         default_joint_angles = {
             "left_leg_yaw_joint": 0.0,
             "left_leg_roll_joint": 0.0,
-            "left_leg_pitch_joint": 0.90,
-            "left_knee_pitch_joint": -1.70,
+            "left_leg_pitch_joint": 0.55,
+            "left_knee_pitch_joint": -1.55,
             "left_ankle_pitch_joint": 0.90,
             "right_leg_yaw_joint": 0.0,
             "right_leg_roll_joint": 0.0,
-            "right_leg_pitch_joint": 0.90,
-            "right_knee_pitch_joint": -1.70,
+            "right_leg_pitch_joint": 0.55,
+            "right_knee_pitch_joint": -1.55,
             "right_ankle_pitch_joint": 0.90,
         }
 
@@ -72,7 +72,7 @@ class OpenDuckPro3RoughCfg(LeggedRobotCfg):
 
     class rewards(LeggedRobotCfg.rewards):
         soft_dof_pos_limit = 0.9
-        base_height_target = 0.338
+        base_height_target = 0.351
 
         class scales(LeggedRobotCfg.rewards.scales):
             tracking_lin_vel = 1.0
