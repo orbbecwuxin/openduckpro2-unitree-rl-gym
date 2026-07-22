@@ -1,3 +1,0 @@
-from .openduckpro3_config import openduckpro3RoughCfg, openduckpro3RoughCfgPPO
-from .openduckpro3_env import openduckpro3Robot
-from .openduckpro3_config import OpenDuckPro3RoughCfg, OpenDuckPro3RoughCfgPPO

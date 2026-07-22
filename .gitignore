@@ -180,6 +180,8 @@ auto_train_runs/
 /resources/robots/h1/
 /resources/robots/h1_2/
 # Duplicate package path; the canonical model is /openduckpro3.
+/legged_gym/envs/openduckpro2/
+/resources/robots/openduckpro2/
 /resources/robots/openduckpro3/
 # Deployment scenes and policies live in their dedicated repositories.
 /deploy/

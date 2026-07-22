@@ -6,7 +6,7 @@ from isaacgym import gymtorch
 from legged_gym.envs.base.legged_robot import LeggedRobot
 
 
-class openduckpro3Robot(LeggedRobot):
+class OpenDuckPro3Robot(LeggedRobot):
 
     def _get_noise_scale_vec(self, cfg):
         """ Sets a vector used to scale the noise added to the observations.

@@ -1,8 +1,8 @@
 from legged_gym.envs.base.legged_robot_config import LeggedRobotCfg, LeggedRobotCfgPPO
 
 
-class openduckpro3RoughCfg(LeggedRobotCfg):
-    """Isaac Gym training config for the 10-DOF openduckpro3 URDF export."""
+class OpenDuckPro3RoughCfg(LeggedRobotCfg):
+    """Isaac Gym training config for the 10-DoF OpenDuckPro3 model."""
 
     class init_state(LeggedRobotCfg.init_state):
         pos = [0.0, 0.0, 0.347]
@@ -14,16 +14,16 @@ class openduckpro3RoughCfg(LeggedRobotCfg):
             "left_ankle_pitch_joint": 0.53,
             "right_leg_yaw_joint": 0.0,
             "right_leg_roll_joint": 0.0,
-            "right_leg_pitch_joint": -0.40,
-            "right_knee_pitch_joint": 0.93,
-            "right_ankle_pitch_joint": -0.53,
+            "right_leg_pitch_joint": 0.40,
+            "right_knee_pitch_joint": -0.93,
+            "right_ankle_pitch_joint": 0.53,
         }
 
     class env(LeggedRobotCfg.env):
-        # 3 ang_vel + 3 gravity + 3 commands + 10 dof pos + 10 dof vel
-        # + 10 previous actions + 2 gait phase terms
+        # 3 angular velocity + 3 gravity + 3 commands + 10 positions
+        # + 10 velocities + 10 previous actions + 2 gait phase terms.
         num_observations = 41
-        num_privileged_obs = 44  # + 3 base_lin_vel for the critic
+        num_privileged_obs = 44
         num_actions = 10
 
     class domain_rand(LeggedRobotCfg.domain_rand):
@@ -36,7 +36,7 @@ class openduckpro3RoughCfg(LeggedRobotCfg):
         max_push_vel_xy = 0.4
 
     class control(LeggedRobotCfg.control):
-        control_type = 'P'
+        control_type = "P"
         stiffness = {
             "leg_yaw": 20.0,
             "leg_roll": 30.0,
@@ -73,16 +73,14 @@ class openduckpro3RoughCfg(LeggedRobotCfg):
     class rewards(LeggedRobotCfg.rewards):
         soft_dof_pos_limit = 0.9
         base_height_target = 0.338
-        # swing_phase_threshold = 0.55
 
         class scales(LeggedRobotCfg.rewards.scales):
-            tracking_lin_vel = 2.0
+            tracking_lin_vel = 1.0
             tracking_ang_vel = 0.5
             lin_vel_z = -2.0
             ang_vel_xy = -0.05
             orientation = -1.0
             base_height = -10.0
-            # torques = -0.00001
             dof_acc = -2.5e-7
             dof_vel = -1e-3
             feet_air_time = 0.0
@@ -95,12 +93,8 @@ class openduckpro3RoughCfg(LeggedRobotCfg):
             feet_swing_height = -20.0
             contact = 0.18
 
-    # class viewer(LeggedRobotCfg.viewer):
-    #     pos = [2.0, -3.0, 1.4]
-    #     lookat = [0.0, 0.0, 0.25]
 
-
-class openduckpro3RoughCfgPPO(LeggedRobotCfgPPO):
+class OpenDuckPro3RoughCfgPPO(LeggedRobotCfgPPO):
     class policy(LeggedRobotCfgPPO.policy):
         init_noise_std = 0.8
         actor_hidden_dims = [32]
