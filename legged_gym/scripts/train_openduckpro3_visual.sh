@@ -46,6 +46,11 @@ fi
 export CUDA_VISIBLE_DEVICES="${PHYSICAL_GPU}"
 export DISPLAY="${DISPLAY_ID}"
 export PATH="${CONDA_ENV}/bin:${PATH}"
+if [[ -n "${PYTHONPATH:-}" ]]; then
+  export PYTHONPATH="${REPO_DIR}:${PYTHONPATH}"
+else
+  export PYTHONPATH="${REPO_DIR}"
+fi
 if [[ -n "${LD_LIBRARY_PATH:-}" ]]; then
   export LD_LIBRARY_PATH="${CONDA_ENV}/lib:${LD_LIBRARY_PATH}"
 else
@@ -58,6 +63,7 @@ printf '  physical_gpu=%s logical_device=cuda:0 display=%s\n' \
 printf '  num_envs=%s iterations=%s seed=%s\n' \
   "${NUM_ENVS}" "${MAX_ITERATIONS}" "${SEED}"
 printf '  run_name=%s\n' "${RUN_NAME}"
+printf '  pythonpath_head=%s\n' "${REPO_DIR}"
 
 cd "${REPO_DIR}"
 exec "${PYTHON}" legged_gym/scripts/train.py \
