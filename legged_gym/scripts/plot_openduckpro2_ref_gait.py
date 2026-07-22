@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render the OpenDuckPro2 phase reference gait as an animated GIF.
+"""Render the openduckpro3 phase reference gait as an animated GIF.
 
 The script is intentionally standalone: it parses the config with ``ast`` and
 the URDF with ``xml.etree`` so it can run without importing Isaac Gym.
@@ -16,7 +16,7 @@ import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from pathlib import Path
 
-os.environ.setdefault("MPLCONFIGDIR", "/tmp/matplotlib-openduckpro2")
+os.environ.setdefault("MPLCONFIGDIR", "/tmp/matplotlib-openduckpro3")
 
 import matplotlib
 
@@ -75,7 +75,7 @@ def _assigned_literal(class_node: ast.ClassDef, name: str):
 
 def load_reference_config(config_path: Path) -> dict:
     tree = ast.parse(config_path.read_text())
-    cfg = _class_node(tree, "OpenDuckPro2RoughCfg")
+    cfg = _class_node(tree, "openduckpro3RoughCfg")
     init_state = _class_node(cfg, "init_state")
     control = _class_node(cfg, "control")
     rewards = _class_node(cfg, "rewards")
@@ -196,7 +196,7 @@ def transform_from_axis(axis: np.ndarray, angle: float) -> np.ndarray:
     return transform
 
 
-class OpenDuckPro2Kinematics:
+class openduckpro3Kinematics:
     def __init__(self, urdf_path: Path):
         self.joints, self.link_collision_meshes = load_urdf(urdf_path)
         self.parents = {joint.child: name for name, joint in self.joints.items()}
@@ -273,7 +273,7 @@ def chain_points(poses: dict[str, np.ndarray], chain: list[str], base_height: fl
     return np.asarray(points)
 
 
-def build_reference_samples(kin: OpenDuckPro2Kinematics, cfg: dict, frames: int):
+def build_reference_samples(kin: openduckpro3Kinematics, cfg: dict, frames: int):
     phases = np.linspace(0.0, 1.0, frames, endpoint=False)
     samples = []
     left_bottom = []
@@ -327,7 +327,7 @@ def render_gif(samples: dict, cfg: dict, output_path: Path, fps: int):
     phases = samples["phases"]
     seconds = phases * PERIOD_S
     fig, axes = plt.subplots(2, 2, figsize=(11, 7.5), dpi=110)
-    fig.suptitle("OpenDuckPro2 Reference Gait", fontsize=14, fontweight="bold")
+    fig.suptitle("openduckpro3 Reference Gait", fontsize=14, fontweight="bold")
 
     left_color = "#1f77b4"
     right_color = "#d62728"
@@ -411,7 +411,7 @@ def render_gif(samples: dict, cfg: dict, output_path: Path, fps: int):
 
 def main() -> None:
     repo_root = Path(__file__).resolve().parents[2]
-    default_output = repo_root / "resources" / "reference_motion" / "openduckpro2" / "openduckpro2_ref_gait.gif"
+    default_output = repo_root / "resources" / "reference_motion" / "openduckpro3" / "openduckpro3_ref_gait.gif"
 
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--frames", type=int, default=80, help="number of animation frames")
@@ -419,11 +419,11 @@ def main() -> None:
     parser.add_argument("--output", type=Path, default=default_output, help="output GIF path")
     args = parser.parse_args()
 
-    config_path = repo_root / "legged_gym" / "envs" / "openduckpro2" / "openduckpro2_config.py"
-    urdf_path = repo_root / "resources" / "robots" / "openduckpro2" / "urdf" / "openduckpro2.urdf"
+    config_path = repo_root / "legged_gym" / "envs" / "openduckpro3" / "openduckpro3_config.py"
+    urdf_path = repo_root / "resources" / "robots" / "openduckpro3" / "urdf" / "openduckpro3.urdf"
 
     cfg = load_reference_config(config_path)
-    kin = OpenDuckPro2Kinematics(urdf_path)
+    kin = openduckpro3Kinematics(urdf_path)
     samples = build_reference_samples(kin, cfg, args.frames)
     render_gif(samples, cfg, args.output, args.fps)
 

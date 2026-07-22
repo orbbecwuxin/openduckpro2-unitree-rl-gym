@@ -8,16 +8,16 @@
     name="base_link">
     <inertial>
       <origin
-        xyz="-0.00141080550252965 0 0.0266358869045288"
+        xyz="-0.00141080550252965 -0.000126717317661465 0.0266358869045288"
         rpy="0 0 0" />
       <mass
         value="1.38" />
       <inertia
         ixx="0.00179049"
-        ixy="0"
+        ixy="0.00000112"
         ixz="0.00001246"
         iyy="0.00039624"
-        iyz="0"
+        iyz="-0.00000082"
         izz="0.00187534" />
     </inertial>
     <visual>
@@ -97,9 +97,9 @@
     <axis
       xyz="0 0 1" />
     <limit
-      lower="-2"
-      upper="2"
-      effort="30"
+      lower="-1"
+      upper="1"
+      effort="17"
       velocity="21" />
   </joint>
   <link
@@ -155,9 +155,9 @@
     <axis
       xyz="0 0 1" />
     <limit
-      lower="-2"
-      upper="2"
-      effort="30"
+      lower="-1"
+      upper="1"
+      effort="17"
       velocity="21" />
   </joint>
   <link
@@ -213,9 +213,9 @@
     <axis
       xyz="0 0 1" />
     <limit
-      lower="-2"
-      upper="2"
-      effort="30"
+      lower="-1"
+      upper="1"
+      effort="17"
       velocity="21" />
   </joint>
   <link
@@ -271,9 +271,9 @@
     <axis
       xyz="0 0 1" />
     <limit
-      lower="-2"
-      upper="2"
-      effort="30"
+      lower="-1"
+      upper="1"
+      effort="17"
       velocity="21" />
   </joint>
   <link
@@ -308,38 +308,11 @@
     </visual>
     <collision>
       <origin
-        xyz="-0.045 -0.061 0.0"
+        xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
-        <sphere
-          radius="0.006" />
-      </geometry>
-    </collision>
-    <collision>
-      <origin
-        xyz="-0.045 -0.061 0.031"
-        rpy="0 0 0" />
-      <geometry>
-        <sphere
-          radius="0.006" />
-      </geometry>
-    </collision>
-    <collision>
-      <origin
-        xyz="0.045 -0.061 0.0"
-        rpy="0 0 0" />
-      <geometry>
-        <sphere
-          radius="0.006" />
-      </geometry>
-    </collision>
-    <collision>
-      <origin
-        xyz="0.045 -0.061 0.031"
-        rpy="0 0 0" />
-      <geometry>
-        <sphere
-          radius="0.006" />
+        <mesh
+          filename="../meshes/left_ankle_pitch_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -356,25 +329,25 @@
     <axis
       xyz="0 0 1" />
     <limit
-      lower="-2"
-      upper="2"
-      effort="30"
+      lower="-1"
+      upper="1"
+      effort="17"
       velocity="21" />
   </joint>
   <link
     name="right_leg_yaw_link">
     <inertial>
       <origin
-        xyz="-0.000168509325045557 -0.000746362761765561 -0.0417397454040535"
+        xyz="-0.000175392332125324 0.000744775332985191 -0.0417397454016966"
         rpy="0 0 0" />
       <mass
-        value="0.48200000" />
+        value=" 0.48200000" />
       <inertia
-        ixx="0.00016435"
-        ixy="0.00000073"
+        ixx="0.00016436"
+        ixy="-0.00000018"
         ixz="-0.00000093"
-        iyy="0.00010408"
-        iyz="0.00000016"
+        iyy="0.00010407"
+        iyz="-0.00000017"
         izz="0.00009129" />
     </inertial>
     <visual>
@@ -406,7 +379,7 @@
     type="revolute">
     <origin
       xyz="0 -0.075 -0.0005"
-      rpy="0 0 -1.5666" />
+      rpy="0 0 1.5666" />
     <parent
       link="base_link" />
     <child
@@ -414,25 +387,25 @@
     <axis
       xyz="0 0 1" />
     <limit
-      lower="-2"
-      upper="2"
-      effort="30"
+      lower="-1"
+      upper="1"
+      effort="17"
       velocity="21" />
   </joint>
   <link
     name="right_leg_roll_link">
     <inertial>
       <origin
-        xyz="0.000744845290186466 -0.0001750947555509 -0.0417397453817851"
+        xyz="-0.000744845341959371 -0.000175094773280884 -0.0417397454013599"
         rpy="0 0 0" />
       <mass
         value="0.48200000" />
       <inertia
-        ixx="0.00009132"
-        ixy="-0.00000188"
-        ixz="0.00000018"
-        iyy="0.00016433"
-        iyz="-0.00000005"
+        ixx="0.00009128"
+        ixy="-0.00000065"
+        ixz="-0.00000018"
+        iyy="0.00016437"
+        iyz="0.00000005"
         izz="0.00010407" />
     </inertial>
     <visual>
@@ -463,8 +436,8 @@
     name="right_leg_roll_joint"
     type="revolute">
     <origin
-      xyz="0.00014573 -0.016499 -0.049"
-      rpy="-1.5708 0 0.0088323" />
+      xyz="0 0.0165 -0.049"
+      rpy="1.5708 0 0.00039951" />
     <parent
       link="right_leg_yaw_link" />
     <child
@@ -472,26 +445,26 @@
     <axis
       xyz="0 0 1" />
     <limit
-      lower="-2"
-      upper="2"
-      effort="30"
+      lower="-1"
+      upper="1"
+      effort="17"
       velocity="21" />
   </joint>
   <link
     name="right_leg_pitch_link">
     <inertial>
       <origin
-        xyz="-0.0476473292738206 0.0769900006807549 0.00428321304072461"
+        xyz="0.0477878331195739 -0.0772345348408712 0.00428321303780235"
         rpy="0 0 0" />
       <mass
         value="0.59500000" />
       <inertia
-        ixx="0.00041776"
-        ixy="0.00001490"
-        ixz="-0.00016045"
-        iyy="0.00056091"
-        iyz="0.00002449"
-        izz="0.00018412" />
+        ixx="0.00042079"
+        ixy="0.00001740"
+        ixz="-0.00016130"
+        iyy="0.00056351"
+        iyz="0.00002736"
+        izz="0.00018478" />
     </inertial>
     <visual>
       <origin
@@ -521,8 +494,8 @@
     name="right_leg_pitch_joint"
     type="revolute">
     <origin
-      xyz="0.0165 0 -0.049"
-      rpy="0 -1.5708 0" />
+      xyz="-0.0165 0 -0.049"
+      rpy="-1.5774 1.5708 -1.5775" />
     <parent
       link="right_leg_roll_link" />
     <child
@@ -530,26 +503,26 @@
     <axis
       xyz="0 0 1" />
     <limit
-      lower="-2"
-      upper="2"
-      effort="30"
+      lower="-1"
+      upper="1"
+      effort="17"
       velocity="21" />
   </joint>
   <link
     name="right_knee_pitch_link">
     <inertial>
       <origin
-        xyz="0.0769900006831681 0.0476473292752241 0.00428321304107685"
+        xyz="-0.0772345348406682 -0.0477878331194861 0.00428321303775761"
         rpy="0 0 0" />
       <mass
         value="0.59500000" />
       <inertia
-        ixx="0.00018488"
-        ixy="-0.00003146"
-        ixz="0.00015989"
-        iyy="0.00055974"
-        iyz="0.00001884"
-        izz="0.00041817" />
+        ixx="0.00018458"
+        ixy="-0.00002533"
+        ixz="0.00016147"
+        iyy="0.00056383"
+        iyz="0.00001625"
+        izz="0.00042066" />
     </inertial>
     <visual>
       <origin
@@ -579,7 +552,7 @@
     name="right_knee_pitch_joint"
     type="revolute">
     <origin
-      xyz="-0.06 0.10392 -0.0095"
+      xyz="0.06 -0.10392 -0.0095"
       rpy="0 0 0" />
     <parent
       link="right_leg_pitch_link" />
@@ -588,25 +561,25 @@
     <axis
       xyz="0 0 1" />
     <limit
-      lower="-2"
-      upper="2"
-      effort="30"
+      lower="-1"
+      upper="1"
+      effort="17"
       velocity="21" />
   </joint>
   <link
     name="right_ankle_pitch_link">
     <inertial>
       <origin
-        xyz="-0.000135018905672298 0.0514949406389236 0.0148389070782686"
+        xyz="0.000135018908126398 0.0514949406305106 0.0148389070726481"
         rpy="0 0 0" />
       <mass
         value="0.10200000" />
       <inertia
-        ixx="0.00005446"
-        ixy="-0.00000355"
-        ixz="-0.00000017"
-        iyy="0.00033166"
-        iyz="0.00000821"
+        ixx="0.00005442"
+        ixy="0.00000099"
+        ixz="-0.00000009"
+        iyy="0.00033171"
+        iyz="0.00000822"
         izz="0.00033135" />
     </inertial>
     <visual>
@@ -625,38 +598,11 @@
     </visual>
     <collision>
       <origin
-        xyz="-0.045 0.061 0.0"
+        xyz="0 0 0"
         rpy="0 0 0" />
       <geometry>
-        <sphere
-          radius="0.006" />
-      </geometry>
-    </collision>
-    <collision>
-      <origin
-        xyz="-0.045 0.061 0.031"
-        rpy="0 0 0" />
-      <geometry>
-        <sphere
-          radius="0.006" />
-      </geometry>
-    </collision>
-    <collision>
-      <origin
-        xyz="0.045 0.061 0.0"
-        rpy="0 0 0" />
-      <geometry>
-        <sphere
-          radius="0.006" />
-      </geometry>
-    </collision>
-    <collision>
-      <origin
-        xyz="0.045 0.061 0.031"
-        rpy="0 0 0" />
-      <geometry>
-        <sphere
-          radius="0.006" />
+        <mesh
+          filename="../meshes/right_ankle_pitch_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -664,8 +610,8 @@
     name="right_ankle_pitch_joint"
     type="revolute">
     <origin
-      xyz="0.10392 0.06 -0.0095"
-      rpy="0 0 0" />
+      xyz="-0.10392 -0.06 -0.0095"
+      rpy="0 0 -3.1416" />
     <parent
       link="right_knee_pitch_link" />
     <child
@@ -673,9 +619,9 @@
     <axis
       xyz="0 0 1" />
     <limit
-      lower="-2"
-      upper="2"
-      effort="30"
+      lower="-1"
+      upper="1"
+      effort="17"
       velocity="21" />
   </joint>
 </robot>

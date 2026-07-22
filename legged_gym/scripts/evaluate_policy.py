@@ -821,7 +821,7 @@ def write_trajectory_svg(path, rows, base_height_target, swing_height_target):
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="720" viewBox="0 0 {width} 720">',
         '<rect width="100%" height="100%" fill="#ffffff"/>',
         '<style>text{font-family:monospace;font-size:14px}.title{font-size:18px;font-weight:bold}.axis{stroke:#999;stroke-width:1}.grid{stroke:#ddd;stroke-width:1}.line{fill:none;stroke-width:2}</style>',
-        '<text x="70" y="32" class="title">OpenDuckPro2 rollout trajectory</text>',
+        '<text x="70" y="32" class="title">openduckpro3 rollout trajectory</text>',
     ]
     top = 60
     for title, series, reference_values in panels:

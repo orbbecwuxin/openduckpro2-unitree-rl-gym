@@ -1,8 +1,8 @@
 from legged_gym.envs.base.legged_robot_config import LeggedRobotCfg, LeggedRobotCfgPPO
 
 
-class OpenDuckPro2RoughCfg(LeggedRobotCfg):
-    """Isaac Gym training config for the 10-DOF OpenDuckPro2 URDF export."""
+class openduckpro3RoughCfg(LeggedRobotCfg):
+    """Isaac Gym training config for the 10-DOF openduckpro3 URDF export."""
 
     class init_state(LeggedRobotCfg.init_state):
         pos = [0.0, 0.0, 0.347]
@@ -55,8 +55,8 @@ class OpenDuckPro2RoughCfg(LeggedRobotCfg):
         decimation = 4
 
     class asset(LeggedRobotCfg.asset):
-        file = "{LEGGED_GYM_ROOT_DIR}/openduckpro2/urdf/openduckpro2.urdf"
-        name = "openduckpro2"
+        file = "{LEGGED_GYM_ROOT_DIR}/openduckpro3/urdf/openduckpro3.urdf"
+        name = "openduckpro3"
         foot_name = "ankle_pitch_link"
         penalize_contacts_on = ["knee_pitch_link", "leg_pitch_link"]
         terminate_after_contacts_on = ["base_link"]
@@ -100,7 +100,7 @@ class OpenDuckPro2RoughCfg(LeggedRobotCfg):
     #     lookat = [0.0, 0.0, 0.25]
 
 
-class OpenDuckPro2RoughCfgPPO(LeggedRobotCfgPPO):
+class openduckpro3RoughCfgPPO(LeggedRobotCfgPPO):
     class policy(LeggedRobotCfgPPO.policy):
         init_noise_std = 0.8
         actor_hidden_dims = [32]
@@ -117,4 +117,4 @@ class OpenDuckPro2RoughCfgPPO(LeggedRobotCfgPPO):
         policy_class_name = "ActorCriticRecurrent"
         max_iterations = 10000
         run_name = ""
-        experiment_name = "openduckpro2"
+        experiment_name = "openduckpro3"

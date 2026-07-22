@@ -19,8 +19,8 @@ from auto_train_common import (
 
 
 DEFAULT_CONFIG = {
-    "task": "openduckpro2",
-    "experiment_name": "openduckpro2",
+    "task": "openduckpro3",
+    "experiment_name": "openduckpro3",
     "gpus": [0, 1],
     "max_parallel_jobs": 2,
     "workspace": {
@@ -89,7 +89,7 @@ DEFAULT_CONFIG = {
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Run parallel reward-search training cycles.")
-    parser.add_argument("--config", default="configs/auto_train/openduckpro2_default.json")
+    parser.add_argument("--config", default="configs/auto_train/openduckpro3_default.json")
     parser.add_argument("--run-id")
     parser.add_argument("--cycles", type=int)
     parser.add_argument("--dry-run", action="store_true")
@@ -1208,7 +1208,7 @@ def write_codex_review_request(
         "rules": [
             "Codex is the optimization owner; auto_train executes one continuous 10K training process per logical candidate and evaluates saved checkpoints afterward.",
             "A logical candidate must keep one run_name, one log directory, and one TensorBoard series; 1K-9K checkpoints never trigger stop/resume segmentation.",
-            "OpenDuckPro2 reward names, formulas, masks, targets, and phase logic remain aligned with G1.",
+            "openduckpro3 reward names, formulas, masks, targets, and phase logic remain aligned with G1.",
             "Candidate search may modify only existing nonzero G1 reward scales; reward source changes are forbidden.",
             "Intermediate 1K-9K evaluations are trend evidence only. The Codex decision is made after the continuous 10K run and post-hoc milestone evaluation complete.",
             "Mature gait admission uses episode fall rate plus 60 ms debounced, cycle-normalized contact metrics; legacy raw contact counts remain diagnostic.",

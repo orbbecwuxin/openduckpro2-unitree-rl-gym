@@ -1,6 +1,6 @@
-# OpenDuckPro2 10K 自动训练流程
+# openduckpro3 10K 自动训练流程
 
-本文描述 `legged_gym/scripts/auto_train.py` 的当前控制契约。该流程只负责 OpenDuckPro2，并以 reward scale 搜索为边界。
+本文描述 `legged_gym/scripts/auto_train.py` 的当前控制契约。该流程只负责 openduckpro3，并以 reward scale 搜索为边界。
 
 ## 强制约束
 
@@ -13,7 +13,7 @@
 
 ## 配置
 
-默认模板是 `configs/auto_train/openduckpro2_default.json`。模板故意将 `candidates` 留空，防止没有 PR gate 的任务被误启动。
+默认模板是 `configs/auto_train/openduckpro3_default.json`。模板故意将 `candidates` 留空，防止没有 PR gate 的任务被误启动。
 
 每个 candidate 至少包含：
 
@@ -66,8 +66,8 @@ scale 不能为零，不能反转正负号。`feet_air_time` 与 `collision` 保
 在 Isaac Gym、PyTorch 和 `rsl_rl` 环境已经激活后执行：
 
 ```bash
-legged_gym/scripts/launch_openduckpro2_training.sh \
-  --config configs/auto_train/openduckpro2_default.json \
+legged_gym/scripts/launch_openduckpro3_training.sh \
+  --config configs/auto_train/openduckpro3_default.json \
   --run-id <unique-run-id> \
   --source-commit <reviewed-source-sha>
 ```
@@ -90,7 +90,7 @@ auto_train_runs/<run-id>/
     codex_decision.json
 ```
 
-实际 PPO 日志位于 `logs/openduckpro2/<run-name>/`。同一 candidate 在 10K 前必须始终绑定到同一目录。
+实际 PPO 日志位于 `logs/openduckpro3/<run-name>/`。同一 candidate 在 10K 前必须始终绑定到同一目录。
 
 ## 评估顺序
 

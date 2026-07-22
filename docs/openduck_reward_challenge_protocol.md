@@ -1,6 +1,6 @@
-# OpenDuckPro2 Reward Scale Challenge
+# openduckpro3 Reward Scale Challenge
 
-该协议用于挑战 OpenDuckPro2 的 reward scale 假设。当前训练合约冻结 reward 名称与公式，因此 challenge 不能授权新增、删除、重命名或改写 reward。
+该协议用于挑战 openduckpro3 的 reward scale 假设。当前训练合约冻结 reward 名称与公式，因此 challenge 不能授权新增、删除、重命名或改写 reward。
 
 ## 触发时机
 

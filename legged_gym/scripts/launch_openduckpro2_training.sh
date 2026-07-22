@@ -4,7 +4,7 @@ set -euo pipefail
 usage() {
   cat <<'EOF'
 Usage:
-  launch_openduckpro2_training.sh --config PATH --source-commit SHA [options]
+  launch_openduckpro3_training.sh --config PATH --source-commit SHA [options]
 
 Options:
   --run-id ID         Unique run id; defaults to a timestamped id.
@@ -79,7 +79,7 @@ if [[ ! -x "${PYTHON}" ]]; then
   exit 2
 fi
 
-RUN_ID="${RUN_ID:-codex_openduckpro2_10k_$(date +%Y%m%d_%H%M%S)}"
+RUN_ID="${RUN_ID:-codex_openduckpro3_10k_$(date +%Y%m%d_%H%M%S)}"
 if [[ ! "${RUN_ID}" =~ ^[A-Za-z0-9._-]+$ ]]; then
   printf 'Run id may contain only letters, numbers, dot, underscore, and dash: %s\n' "${RUN_ID}" >&2
   exit 2

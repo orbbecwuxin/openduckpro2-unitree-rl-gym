@@ -8,7 +8,7 @@ CONDA_ENV="${CONDA_ENV:-openduck-unitree}"
 CONDA_SH="${CONDA_SH:-${HOME}/miniconda3/etc/profile.d/conda.sh}"
 GPU_ID="${GPU_ID:-0}"
 NUM_ENVS="${NUM_ENVS:-1}"
-RUN_NAME="${RUN_NAME:-openduckpro2_play}"
+RUN_NAME="${RUN_NAME:-openduckpro3_play}"
 SIM_DEVICE="${SIM_DEVICE:-cuda:${GPU_ID}}"
 RL_DEVICE="${RL_DEVICE:-cuda:${GPU_ID}}"
 LOAD_RUN="${LOAD_RUN:-}"
@@ -67,7 +67,7 @@ fi
 export PYTHONPATH="${SCRIPT_DIR}${PYTHONPATH:+:${PYTHONPATH}}"
 
 ARGS=(
-    --task=openduckpro2
+    --task=openduckpro3
     --sim_device="${SIM_DEVICE}"
     --rl_device="${RL_DEVICE}"
     --num_envs="${NUM_ENVS}"
@@ -99,8 +99,8 @@ if [[ "$KEYBOARD_COMMANDS" == "1" || "$KEYBOARD_COMMANDS" == "true" || "$KEYBOAR
     fi
 fi
 
-echo "Playing OpenDuckPro2 with:"
-echo "  task: openduckpro2"
+echo "Playing openduckpro3 with:"
+echo "  task: openduckpro3"
 echo "  conda env: ${CONDA_ENV:-current shell}"
 echo "  sim device: ${SIM_DEVICE}"
 echo "  rl device: ${RL_DEVICE}"

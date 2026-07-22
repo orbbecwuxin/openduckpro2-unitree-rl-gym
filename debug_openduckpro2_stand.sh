@@ -39,7 +39,7 @@ fi
 export PYTHONPATH="${SCRIPT_DIR}${PYTHONPATH:+:${PYTHONPATH}}"
 
 ARGS=(
-    --task=openduckpro2
+    --task=openduckpro3
     --sim_device="${SIM_DEVICE}"
     --rl_device="${RL_DEVICE}"
     --num_envs="${NUM_ENVS}"

@@ -1,6 +1,6 @@
 {
-  "task": "openduckpro2",
-  "experiment_name": "openduckpro2",
+  "task": "openduckpro3",
+  "experiment_name": "openduckpro3",
   "gpus": [
     0
   ],

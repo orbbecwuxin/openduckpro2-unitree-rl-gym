@@ -8,7 +8,7 @@ CONDA_ENV="${CONDA_ENV:-}"
 GPU_ID="${GPU_ID:-0}"
 NUM_ENVS="${NUM_ENVS:-4096}"
 MAX_ITERATIONS="${MAX_ITERATIONS:-10000}"
-RUN_NAME="${RUN_NAME:-openduckpro2_train}"
+RUN_NAME="${RUN_NAME:-openduckpro3_train}"
 SIM_DEVICE="${SIM_DEVICE:-cuda:${GPU_ID}}"
 RL_DEVICE="${RL_DEVICE:-cuda:${GPU_ID}}"
 HEADLESS="${HEADLESS:-1}"
@@ -40,8 +40,8 @@ if [[ -n "${CONDA_PREFIX:-}" ]]; then
 fi
 export PYTHONPATH="${SCRIPT_DIR}${PYTHONPATH:+:${PYTHONPATH}}"
 
-echo "Training OpenDuckPro2 with:"
-echo "  task: openduckpro2"
+echo "Training openduckpro3 with:"
+echo "  task: openduckpro3"
 echo "  conda env: ${CONDA_ENV:-current shell}"
 echo "  sim device: ${SIM_DEVICE}"
 echo "  rl device: ${RL_DEVICE}"
@@ -52,7 +52,7 @@ echo "  headless: ${HEADLESS}"
 echo "  python: ${PYTHON_BIN}"
 
 ARGS=(
-    --task=openduckpro2
+    --task=openduckpro3
     --sim_device="${SIM_DEVICE}"
     --rl_device="${RL_DEVICE}"
     --num_envs="${NUM_ENVS}"

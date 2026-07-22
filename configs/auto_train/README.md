@@ -1,6 +1,6 @@
-# OpenDuckPro2 Training Configuration
+# openduckpro3 Training Configuration
 
-`openduckpro2_default.json` is a safe 10K template. It intentionally contains no candidate and cannot start until a candidate has a matching open draft pull request in the training-control repository.
+`openduckpro3_default.json` is a safe 10K template. It intentionally contains no candidate and cannot start until a candidate has a matching open draft pull request in the training-control repository.
 
 Each candidate must run as one process, one `run_name`, one log directory, and one TensorBoard series through iteration 10000. Iterations 1000 through 9000 are checkpoint milestones only; evaluation starts after training reaches 10000.
 

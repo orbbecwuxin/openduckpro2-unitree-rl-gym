@@ -179,14 +179,14 @@ auto_train_runs/
 /resources/robots/go2/
 /resources/robots/h1/
 /resources/robots/h1_2/
-# Duplicate package path; the canonical model is /openduckpro2.
-/resources/robots/openduckpro2/
+# Duplicate package path; the canonical model is /openduckpro3.
+/resources/robots/openduckpro3/
 # Deployment scenes and policies live in their dedicated repositories.
 /deploy/
 /deploy_open_duck_mujoco.sh
 
 # Locally retained experiment files are not part of the public distribution.
 /configs/auto_train/*.json
-!/configs/auto_train/openduckpro2_default.json
+!/configs/auto_train/openduckpro3_default.json
 /scripts/
 /tasks/
