@@ -66,9 +66,9 @@ class OpenDuckPro3RoughCfg(LeggedRobotCfg):
 
     class commands(LeggedRobotCfg.commands):
         class ranges(LeggedRobotCfg.commands.ranges):
-            lin_vel_x = [-0.45, 0.45]
-            lin_vel_y = [-0.18, 0.18]
-            ang_vel_yaw = [-0.36, 0.36]
+            lin_vel_x = [0.45, 0.45]
+            lin_vel_y = [0.0, 0.0]
+            ang_vel_yaw = [0.0, 0.0]
 
     class rewards(LeggedRobotCfg.rewards):
         soft_dof_pos_limit = 0.9
