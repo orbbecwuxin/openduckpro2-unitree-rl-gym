@@ -2,6 +2,7 @@ import numpy as np
 import torch
 
 from isaacgym import gymtorch
+from isaacgym.torch_utils import torch_rand_float
 
 from legged_gym.envs.base.legged_robot import LeggedRobot
 
@@ -45,6 +46,49 @@ class OpenDuckPro3Robot(LeggedRobot):
     def _init_buffers(self):
         super()._init_buffers()
         self._init_foot()
+
+    def _reset_dofs(self, env_ids):
+        self.dof_pos[env_ids] = self.default_dof_pos
+        noise = getattr(self.cfg.init_state, "dof_pos_noise", 0.0)
+        if noise > 0.0:
+            self.dof_pos[env_ids] += torch_rand_float(
+                -noise, noise, (len(env_ids), self.num_dof), device=self.device
+            )
+        self.dof_vel[env_ids] = 0.0
+
+        env_ids_int32 = env_ids.to(dtype=torch.int32)
+        self.gym.set_dof_state_tensor_indexed(
+            self.sim,
+            gymtorch.unwrap_tensor(self.dof_state),
+            gymtorch.unwrap_tensor(env_ids_int32),
+            len(env_ids_int32),
+        )
+
+    def _reset_root_states(self, env_ids):
+        self.root_states[env_ids] = self.base_init_state
+        self.root_states[env_ids, :3] += self.env_origins[env_ids]
+
+        xy_noise = getattr(self.cfg.init_state, "root_xy_noise", 0.0)
+        if xy_noise > 0.0:
+            self.root_states[env_ids, :2] += torch_rand_float(
+                -xy_noise, xy_noise, (len(env_ids), 2), device=self.device
+            )
+
+        vel_noise = getattr(self.cfg.init_state, "root_vel_noise", 0.0)
+        if vel_noise > 0.0:
+            self.root_states[env_ids, 7:13] = torch_rand_float(
+                -vel_noise, vel_noise, (len(env_ids), 6), device=self.device
+            )
+        else:
+            self.root_states[env_ids, 7:13] = 0.0
+
+        env_ids_int32 = env_ids.to(dtype=torch.int32)
+        self.gym.set_actor_root_state_tensor_indexed(
+            self.sim,
+            gymtorch.unwrap_tensor(self.root_states),
+            gymtorch.unwrap_tensor(env_ids_int32),
+            len(env_ids_int32),
+        )
 
     def update_feet_state(self):
         self.gym.refresh_rigid_body_state_tensor(self.sim)
