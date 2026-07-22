@@ -5,18 +5,18 @@ class OpenDuckPro3RoughCfg(LeggedRobotCfg):
     """Isaac Gym training config for the 10-DoF OpenDuckPro3 model."""
 
     class init_state(LeggedRobotCfg.init_state):
-        pos = [0.0, 0.0, 0.347]
+        pos = [0.0, 0.0, 0.36]
         default_joint_angles = {
             "left_leg_yaw_joint": 0.0,
             "left_leg_roll_joint": 0.0,
-            "left_leg_pitch_joint": 0.40,
-            "left_knee_pitch_joint": -0.93,
-            "left_ankle_pitch_joint": 0.53,
+            "left_leg_pitch_joint": 0.90,
+            "left_knee_pitch_joint": -1.70,
+            "left_ankle_pitch_joint": 0.90,
             "right_leg_yaw_joint": 0.0,
             "right_leg_roll_joint": 0.0,
-            "right_leg_pitch_joint": 0.40,
-            "right_knee_pitch_joint": -0.93,
-            "right_ankle_pitch_joint": 0.53,
+            "right_leg_pitch_joint": 0.90,
+            "right_knee_pitch_joint": -1.70,
+            "right_ankle_pitch_joint": 0.90,
         }
 
     class env(LeggedRobotCfg.env):
