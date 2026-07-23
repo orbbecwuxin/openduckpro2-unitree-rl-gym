@@ -11,12 +11,12 @@ class OpenDuckPro3RoughCfg(LeggedRobotCfg):
             "left_leg_roll_joint": 0.0,
             "left_leg_pitch_joint": 0.55,
             "left_knee_pitch_joint": -1.55,
-            "left_ankle_pitch_joint": 0.90,
+            "left_ankle_pitch_joint": 0.97,
             "right_leg_yaw_joint": 0.0,
             "right_leg_roll_joint": 0.0,
             "right_leg_pitch_joint": 0.55,
             "right_knee_pitch_joint": -1.55,
-            "right_ankle_pitch_joint": 0.90,
+            "right_ankle_pitch_joint": 0.97,
         }
 
     class env(LeggedRobotCfg.env):
