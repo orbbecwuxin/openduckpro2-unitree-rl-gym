@@ -31,7 +31,7 @@ class OpenDuckPro3RoughCfg(LeggedRobotCfg):
         friction_range = [0.1, 1.25]
         randomize_base_mass = True
         added_mass_range = [-0.5, 0.5]
-        push_robots = False
+        push_robots = True
         push_interval_s = 5
         max_push_vel_xy = 0.4
 
@@ -66,7 +66,7 @@ class OpenDuckPro3RoughCfg(LeggedRobotCfg):
 
     class commands(LeggedRobotCfg.commands):
         class ranges(LeggedRobotCfg.commands.ranges):
-            lin_vel_x = [0.25, 0.25]
+            lin_vel_x = [0.24, 0.75]
             lin_vel_y = [0.0, 0.0]
             ang_vel_yaw = [0.0, 0.0]
 
@@ -89,7 +89,7 @@ class OpenDuckPro3RoughCfg(LeggedRobotCfg):
             dof_pos_limits = -5.0
             alive = 0.15
             hip_pos = -1.0
-            contact_no_vel = -0.2
+            contact_no_vel = -0.5
             feet_swing_height = -20.0
             contact = 0.18
 
