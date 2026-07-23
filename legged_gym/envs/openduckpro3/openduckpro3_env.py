@@ -101,12 +101,15 @@ class OpenDuckPro3Robot(LeggedRobot):
         for i in range(self.feet_num):
             is_stance = self.leg_phase[:, i] < 0.55
             contact = self.contact_forces[:, self.feet_indices[i], 2] > 1
-            res += ~(contact ^ is_stance)
+            res += (contact & is_stance).float()
+            res -= (contact & ~is_stance).float()
         return res
 
     def _reward_feet_swing_height(self):
-        contact = torch.norm(self.contact_forces[:, self.feet_indices, :3], dim=2) > 1.0
-        pos_error = torch.square(self.feet_pos[:, :, 2] - 0.08) * ~contact
+        is_swing = self.leg_phase >= 0.55
+        pos_error = torch.square(
+            self.feet_pos[:, :, 2] - self.cfg.rewards.swing_height_target
+        ) * is_swing
         return torch.sum(pos_error, dim=1)
 
     def _reward_alive(self):

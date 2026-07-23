@@ -73,6 +73,7 @@ class OpenDuckPro3RoughCfg(LeggedRobotCfg):
     class rewards(LeggedRobotCfg.rewards):
         soft_dof_pos_limit = 0.9
         base_height_target = 0.351
+        swing_height_target = 0.08
 
         class scales(LeggedRobotCfg.rewards.scales):
             tracking_lin_vel = 1.0
