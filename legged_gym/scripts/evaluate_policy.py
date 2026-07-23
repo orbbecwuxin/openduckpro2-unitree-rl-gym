@@ -686,7 +686,7 @@ def reference_foot_heights(
     swing_den = max(1.0 - swing_threshold, 1e-6)
     progress = torch.clamp((phases - swing_threshold) / swing_den, 0.0, 1.0)
     swing_amplitude = torch.clamp(
-        torch.full_like(stance_heights, target_height) - stance_heights,
+        torch.full_like(stance_heights, target_height),
         min=min_clearance,
     )
     return torch.where(
