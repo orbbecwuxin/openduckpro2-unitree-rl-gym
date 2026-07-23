@@ -73,7 +73,10 @@ class OpenDuckPro3RoughCfg(LeggedRobotCfg):
     class rewards(LeggedRobotCfg.rewards):
         soft_dof_pos_limit = 0.9
         base_height_target = 0.351
-        swing_height_target = 0.08
+        swing_height_target = 0.04
+        swing_height_min = 0.03
+        swing_height_max = 0.05
+        contact_mismatch_penalty = 0.3
 
         class scales(LeggedRobotCfg.rewards.scales):
             tracking_lin_vel = 1.0
@@ -91,8 +94,8 @@ class OpenDuckPro3RoughCfg(LeggedRobotCfg):
             alive = 0.15
             hip_pos = -1.0
             contact_no_vel = -0.5
-            feet_swing_height = -20.0
-            contact = 0.5
+            feet_swing_height = 1.0
+            contact = 1.0
 
 
 class OpenDuckPro3RoughCfgPPO(LeggedRobotCfgPPO):

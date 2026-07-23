@@ -41,6 +41,11 @@ class OpenDuckPro3Robot(LeggedRobot):
         self.feet_state = self.rigid_body_states_view[:, self.feet_indices, :]
         self.feet_pos = self.feet_state[:, :, :3]
         self.feet_vel = self.feet_state[:, :, 7:10]
+        self.last_feet_z = self.feet_pos[:, :, 2].clone()
+        self.feet_clearance = torch.zeros_like(self.last_feet_z)
+        self.reset_feet_clearance = torch.ones(
+            self.num_envs, dtype=torch.bool, device=self.device
+        )
 
     def _init_buffers(self):
         super()._init_buffers()
@@ -52,6 +57,12 @@ class OpenDuckPro3Robot(LeggedRobot):
         self.feet_state = self.rigid_body_states_view[:, self.feet_indices, :]
         self.feet_pos = self.feet_state[:, :, :3]
         self.feet_vel = self.feet_state[:, :, 7:10]
+
+    def reset_idx(self, env_ids):
+        super().reset_idx(env_ids)
+        if hasattr(self, "reset_feet_clearance"):
+            self.feet_clearance[env_ids] = 0.0
+            self.reset_feet_clearance[env_ids] = True
 
     def _post_physics_step_callback(self):
         self.update_feet_state()
@@ -97,31 +108,44 @@ class OpenDuckPro3Robot(LeggedRobot):
 
 
     def _reward_contact(self):
-        res = torch.zeros(self.num_envs, dtype=torch.float, device=self.device)
-        for i in range(self.feet_num):
-            is_stance = self.leg_phase[:, i] < 0.55
-            contact = self.contact_forces[:, self.feet_indices[i], 2] > 1
-            res += (contact & is_stance).float()
-            res -= (contact & ~is_stance).float()
-        return res
+        is_stance = self.leg_phase < 0.55
+        contact = self.contact_forces[:, self.feet_indices, 2] > 1
+        matches_phase = contact == is_stance
+        mismatch = self.cfg.rewards.contact_mismatch_penalty
+        reward = matches_phase.float() - (~matches_phase).float() * mismatch
+        return torch.mean(reward, dim=1)
 
     def _reward_feet_swing_height(self):
+        # Accumulate clearance from the latest contact instead of world-frame height.
+        delta_z = self.feet_pos[:, :, 2] - self.last_feet_z
+        delta_z *= ~self.reset_feet_clearance.unsqueeze(1)
+        self.reset_feet_clearance.fill_(False)
+        self.feet_clearance += delta_z
+        self.last_feet_z.copy_(self.feet_pos[:, :, 2])
+
+        contact = self.contact_forces[:, self.feet_indices, 2] > 1
         is_swing = self.leg_phase >= 0.55
-        pos_error = torch.square(
-            self.feet_pos[:, :, 2] - self.cfg.rewards.swing_height_target
-        ) * is_swing
-        return torch.sum(pos_error, dim=1)
+        clearance = torch.clamp(self.feet_clearance, min=0.0)
+        min_height = self.cfg.rewards.swing_height_min
+        max_height = self.cfg.rewards.swing_height_max
+        ramp_width = max(max_height - min_height, 1e-6)
+        lift_reward = torch.clamp(clearance / min_height, 0.0, 1.0)
+        excess_reward = torch.clamp(
+            (max_height + ramp_width - clearance) / ramp_width, 0.0, 1.0
+        )
+        reward = lift_reward * excess_reward * is_swing
+        self.feet_clearance *= ~contact
+        return torch.sum(reward, dim=1)
 
     def _reward_alive(self):
         # Reward for staying alive
         return 1.0
 
     def _reward_contact_no_vel(self):
-        # Penalize contact with no velocity
+        # Penalize horizontal foot slip while in contact.
         contact = torch.norm(self.contact_forces[:, self.feet_indices, :3], dim=2) > 1.
-        contact_feet_vel = self.feet_vel * contact.unsqueeze(-1)
-        penalize = torch.square(contact_feet_vel[:, :, :3])
-        return torch.sum(penalize, dim=(1,2))
+        horizontal_speed = torch.sum(torch.square(self.feet_vel[:, :, :2]), dim=2)
+        return torch.sum(horizontal_speed * contact, dim=1)
 
     def _reward_hip_pos(self):
         return torch.sum(torch.square(self.dof_pos[:, [0, 1, 5, 6]]), dim=1)
