@@ -38,17 +38,17 @@ class OpenDuckPro3RoughCfg(LeggedRobotCfg):
     class control(LeggedRobotCfg.control):
         control_type = "P"
         stiffness = {
-            "leg_yaw": 15.0,
-            "leg_roll": 20.0,
-            "leg_pitch": 20.0,
+            "leg_yaw":30.0,
+            "leg_roll": 30.0,
+            "leg_pitch": 30.0,
             "knee": 20.0,
-            "ankle": 10.0,
+            "ankle": 20.0,
         }
         damping = {
-            "leg_yaw": 0.6,
-            "leg_roll": 0.8,
-            "leg_pitch": 0.8,
-            "knee": 0.8,
+            "leg_yaw": 1.2,
+            "leg_roll": 1.2,
+            "leg_pitch": 1.2,
+            "knee": 0.5,
             "ankle": 0.5,
         }
         action_scale = 0.25
