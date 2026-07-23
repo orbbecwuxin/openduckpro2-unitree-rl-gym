@@ -11,12 +11,12 @@ class OpenDuckPro3RoughCfg(LeggedRobotCfg):
             "left_leg_roll_joint": 0.0,
             "left_leg_pitch_joint": 0.55,
             "left_knee_pitch_joint": -1.55,
-            "left_ankle_pitch_joint": 0.97,
+            "left_ankle_pitch_joint": 0.90,
             "right_leg_yaw_joint": 0.0,
             "right_leg_roll_joint": 0.0,
             "right_leg_pitch_joint": 0.55,
             "right_knee_pitch_joint": -1.55,
-            "right_ankle_pitch_joint": 0.97,
+            "right_ankle_pitch_joint": 0.90,
         }
 
     class env(LeggedRobotCfg.env):
@@ -38,17 +38,17 @@ class OpenDuckPro3RoughCfg(LeggedRobotCfg):
     class control(LeggedRobotCfg.control):
         control_type = "P"
         stiffness = {
-            "leg_yaw":30.0,
-            "leg_roll": 30.0,
-            "leg_pitch": 30.0,
+            "leg_yaw": 15.0,
+            "leg_roll": 20.0,
+            "leg_pitch": 20.0,
             "knee": 20.0,
-            "ankle": 20.0,
+            "ankle": 10.0,
         }
         damping = {
-            "leg_yaw": 1.2,
-            "leg_roll": 1.2,
-            "leg_pitch": 1.2,
-            "knee": 0.5,
+            "leg_yaw": 0.6,
+            "leg_roll": 0.8,
+            "leg_pitch": 0.8,
+            "knee": 0.8,
             "ankle": 0.5,
         }
         action_scale = 0.25
