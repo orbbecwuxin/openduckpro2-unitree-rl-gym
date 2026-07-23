@@ -60,7 +60,7 @@ class OpenDuckPro3RoughCfg(LeggedRobotCfg):
         foot_name = "ankle_pitch_link"
         penalize_contacts_on = ["knee_pitch_link", "leg_pitch_link"]
         terminate_after_contacts_on = ["base_link"]
-        default_dof_drive_mode = 3
+        # default_dof_drive_mode = 3
         self_collisions = 0
         flip_visual_attachments = False
 
