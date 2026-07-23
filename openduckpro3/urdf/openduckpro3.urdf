@@ -320,9 +320,26 @@
           rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
       </material>
     </visual>
+  </link>
+  <link
+    name="right_foot_link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.001" />
+      <inertia
+        ixx="0.000001"
+        ixy="0"
+        ixz="0"
+        iyy="0.000001"
+        iyz="0"
+        izz="0.000001" />
+    </inertial>
     <collision>
       <origin
-        xyz="-0.045 -0.061 0.0"
+        xyz="-0.045 0 -0.0155"
         rpy="0 0 0" />
       <geometry>
         <sphere
@@ -331,7 +348,7 @@
     </collision>
     <collision>
       <origin
-        xyz="-0.045 -0.061 0.031"
+        xyz="-0.045 0 0.0155"
         rpy="0 0 0" />
       <geometry>
         <sphere
@@ -340,7 +357,7 @@
     </collision>
     <collision>
       <origin
-        xyz="0.045 -0.061 0.0"
+        xyz="0.045 0 -0.0155"
         rpy="0 0 0" />
       <geometry>
         <sphere
@@ -349,7 +366,7 @@
     </collision>
     <collision>
       <origin
-        xyz="0.045 -0.061 0.031"
+        xyz="0.045 0 0.0155"
         rpy="0 0 0" />
       <geometry>
         <sphere
@@ -357,6 +374,18 @@
       </geometry>
     </collision>
   </link>
+  <joint
+    name="right_foot_fixed_joint"
+    type="fixed"
+    dont_collapse="true">
+    <origin
+      xyz="0 -0.061 0.0155"
+      rpy="0 0 0" />
+    <parent
+      link="right_ankle_pitch_link" />
+    <child
+      link="right_foot_link" />
+  </joint>
   <joint
     name="right_ankle_pitch_joint"
     type="revolute">
@@ -637,9 +666,26 @@
           rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
       </material>
     </visual>
+  </link>
+  <link
+    name="left_foot_link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.001" />
+      <inertia
+        ixx="0.000001"
+        ixy="0"
+        ixz="0"
+        iyy="0.000001"
+        iyz="0"
+        izz="0.000001" />
+    </inertial>
     <collision>
       <origin
-        xyz="-0.0449847151133767 -0.0609999999438713 0.00117278003736471"
+        xyz="-0.0445807596327834 0.0000000010395219 0.0166675094314195"
         rpy="3.14159255785447 0.0260645999998239 -1.24772214782354e-09" />
       <geometry>
         <sphere
@@ -648,7 +694,7 @@
     </collision>
     <collision>
       <origin
-        xyz="-0.0457926262285836 -0.0610000029106582 -0.0298166904264867"
+        xyz="-0.0453886707479903 -0.0000000019272650 -0.0143219610324319"
         rpy="3.14159255785447 0.0260645999998239 -1.24772214782354e-09" />
       <geometry>
         <sphere
@@ -657,7 +703,7 @@
     </collision>
     <collision>
       <origin
-        xyz="0.0449847152655471 -0.0610000000561282 -0.00117276836162295"
+        xyz="0.0453886707461404 0.0000000009272650 0.0143219610324318"
         rpy="3.14159255785447 0.0260645999998239 -1.24772214782354e-09" />
       <geometry>
         <sphere
@@ -666,7 +712,7 @@
     </collision>
     <collision>
       <origin
-        xyz="0.0441768041503402 -0.061000003022915 -0.0321622388254743"
+        xyz="0.0445807596309335 -0.0000000020395218 -0.0166675094314195"
         rpy="3.14159255785447 0.0260645999998239 -1.24772214782354e-09" />
       <geometry>
         <sphere
@@ -674,6 +720,18 @@
       </geometry>
     </collision>
   </link>
+  <joint
+    name="left_foot_fixed_joint"
+    type="fixed"
+    dont_collapse="true">
+    <origin
+      xyz="-0.0004039554805933 -0.0610000009833932 -0.0154947293940548"
+      rpy="0 0 0" />
+    <parent
+      link="left_ankle_pitch_link" />
+    <child
+      link="left_foot_link" />
+  </joint>
   <joint
     name="left_ankle_pitch_joint"
     type="revolute">

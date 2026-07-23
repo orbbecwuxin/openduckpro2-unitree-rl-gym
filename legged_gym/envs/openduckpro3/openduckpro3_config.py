@@ -57,7 +57,7 @@ class OpenDuckPro3RoughCfg(LeggedRobotCfg):
     class asset(LeggedRobotCfg.asset):
         file = "{LEGGED_GYM_ROOT_DIR}/openduckpro3/urdf/openduckpro3.urdf"
         name = "openduckpro3"
-        foot_name = "ankle_pitch_link"
+        foot_name = "foot_link"
         penalize_contacts_on = ["knee_pitch_link", "leg_pitch_link"]
         terminate_after_contacts_on = ["base_link"]
         default_dof_drive_mode = 3
