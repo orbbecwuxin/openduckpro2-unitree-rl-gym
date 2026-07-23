@@ -91,7 +91,7 @@ class OpenDuckPro3RoughCfg(LeggedRobotCfg):
             hip_pos = -1.0
             contact_no_vel = -0.5
             feet_swing_height = -20.0
-            contact = 0.18
+            contact = 0.5
 
 
 class OpenDuckPro3RoughCfgPPO(LeggedRobotCfgPPO):
