@@ -67,7 +67,7 @@ class OpenDuckPro3Robot(LeggedRobot):
     def _post_physics_step_callback(self):
         self.update_feet_state()
 
-        period = 0.55
+        period = 0.56
         offset = 0.5
         self.phase = (self.episode_length_buf * self.dt) % period / period
         self.phase_left = self.phase

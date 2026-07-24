@@ -11,7 +11,7 @@ PHYSICAL_GPU=1
 NUM_ENVS=4096
 MAX_ITERATIONS=10000
 SEED=1
-RUN_NAME="manual_headless_openduckpro3_flex20_t055_vx015_030"
+RUN_NAME="manual_headless_openduckpro3_flex20_t056_vx015_030"
 # ================================================================
 
 PYTHON="${CONDA_ENV}/bin/python"
