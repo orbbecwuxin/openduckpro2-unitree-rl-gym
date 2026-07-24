@@ -1,0 +1,17 @@
+[package]
+version = "0.1.0"
+category = "isaaclab"
+title = "OpenDuckPro3 Isaac Lab Tasks"
+author = "OpenDuck contributors"
+maintainer = "OpenDuck contributors"
+description = "OpenDuckPro3 direct reinforcement-learning environments"
+repository = "https://github.com/orbbecwuxin/openduckpro2-unitree-rl-gym"
+keywords = ["isaaclab", "openduck", "locomotion"]
+
+[dependencies]
+"isaaclab" = {}
+"isaaclab_rl" = {}
+"isaaclab_tasks" = {}
+
+[[python.module]]
+name = "isaaclab_openduck"
