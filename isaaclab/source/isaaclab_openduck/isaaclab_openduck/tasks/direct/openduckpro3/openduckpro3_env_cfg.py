@@ -24,6 +24,7 @@ OPENDUCKPRO3_CFG = ArticulationCfg(
         asset_path=str(OPENDUCKPRO3_URDF),
         fix_base=False,
         merge_fixed_joints=True,
+        make_instanceable=False,
         self_collision=False,
         activate_contact_sensors=True,
         joint_drive=None,
