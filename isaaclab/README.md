@@ -19,10 +19,10 @@ Run a one-environment import and physics smoke test:
 PYTHONPATH="$PWD/isaaclab/source/isaaclab_openduck" \
 ISAACLAB_ROOT=/data2/wuxin/IsaacLab-2.3.2 \
 /data2/conda/envs/leggedlab-train/bin/python \
-  isaaclab/scripts/run_upstream.py zero \
-  --task Isaac-OpenDuckPro3-Direct-v0 --device cuda:0 \
-  --num_envs 1 --headless
+  isaaclab/scripts/smoke.py --device cuda:0 --num_envs 1 --headless
 ```
+
+Use `--events none|friction|mass|push|all` to isolate startup randomization.
 
 Start the default 4096-environment, 10K-iteration training:
 
