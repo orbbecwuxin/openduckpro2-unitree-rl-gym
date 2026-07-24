@@ -29,6 +29,7 @@ from isaaclab_tasks.utils import parse_env_cfg
 
 
 def main() -> None:
+    print(f"SMOKE_STAGE config events={args.events}", flush=True)
     env_cfg = parse_env_cfg(
         args.task, device=args.device, num_envs=args.num_envs, use_fabric=True
     )
@@ -45,8 +46,11 @@ def main() -> None:
             env_cfg.events.push_robot if args.events == "push" else None
         )
 
+    print("SMOKE_STAGE create_env", flush=True)
     env = gym.make(args.task, cfg=env_cfg)
+    print("SMOKE_STAGE reset", flush=True)
     observations, _ = env.reset()
+    print("SMOKE_STAGE step", flush=True)
     for _ in range(args.steps):
         actions = torch.zeros(env.unwrapped.num_envs, 10, device=env.unwrapped.device)
         observations, rewards, terminated, truncated, _ = env.step(actions)
@@ -59,10 +63,11 @@ def main() -> None:
         "SMOKE_OK "
         f"events={args.events} steps={args.steps} "
         f"policy={tuple(policy.shape)} critic={tuple(critic.shape)} "
-        f"reward_mean={rewards.mean().item():.6f}"
+        f"reward_mean={rewards.mean().item():.6f}",
+        flush=True,
     )
-    print(f"JOINTS={env.unwrapped._robot.data.joint_names}")
-    print(f"FEET={env.unwrapped._feet_names}")
+    print(f"JOINTS={env.unwrapped._robot.data.joint_names}", flush=True)
+    print(f"FEET={env.unwrapped._feet_names}", flush=True)
     env.close()
 
 
