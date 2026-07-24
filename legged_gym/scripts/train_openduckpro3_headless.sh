@@ -7,11 +7,11 @@ REPO_DIR="$(cd -- "${SCRIPT_DIR}/../.." && pwd)"
 # ======================== EDITABLE CONFIG ========================
 # Change these values, then run this script without extra arguments.
 CONDA_ENV="/data2/conda/envs/openduck-unitree"
-PHYSICAL_GPU=2
-NUM_ENVS=1024
+PHYSICAL_GPU=1
+NUM_ENVS=4096
 MAX_ITERATIONS=10000
 SEED=1
-RUN_NAME="manual_headless_openduckpro3_kp"
+RUN_NAME="manual_headless_openduckpro3_flex20_t056_vx015_030"
 # ================================================================
 
 PYTHON="${CONDA_ENV}/bin/python"
