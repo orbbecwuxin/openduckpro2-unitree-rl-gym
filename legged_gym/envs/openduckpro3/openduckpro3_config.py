@@ -5,18 +5,18 @@ class OpenDuckPro3RoughCfg(LeggedRobotCfg):
     """Isaac Gym training config for the 10-DoF OpenDuckPro3 model."""
 
     class init_state(LeggedRobotCfg.init_state):
-        pos = [0.0, 0.0, 0.36]
+        pos = [0.0, 0.0, 0.35]
         default_joint_angles = {
             "left_leg_yaw_joint": 0.0,
             "left_leg_roll_joint": 0.0,
             "left_leg_pitch_joint": 0.55,
-            "left_knee_pitch_joint": -1.55,
-            "left_ankle_pitch_joint": 0.90,
+            "left_knee_pitch_joint": -1.22,
+            "left_ankle_pitch_joint": 0.67,
             "right_leg_yaw_joint": 0.0,
             "right_leg_roll_joint": 0.0,
             "right_leg_pitch_joint": 0.55,
-            "right_knee_pitch_joint": -1.55,
-            "right_ankle_pitch_joint": 0.90,
+            "right_knee_pitch_joint": -1.22,
+            "right_ankle_pitch_joint": 0.67,
         }
 
     class env(LeggedRobotCfg.env):
@@ -66,13 +66,13 @@ class OpenDuckPro3RoughCfg(LeggedRobotCfg):
 
     class commands(LeggedRobotCfg.commands):
         class ranges(LeggedRobotCfg.commands.ranges):
-            lin_vel_x = [0.24, 0.75]
+            lin_vel_x = [0.15, 0.30]
             lin_vel_y = [0.0, 0.0]
             ang_vel_yaw = [0.0, 0.0]
 
     class rewards(LeggedRobotCfg.rewards):
         soft_dof_pos_limit = 0.9
-        base_height_target = 0.351
+        base_height_target = 0.348
         swing_height_target = 0.04
         swing_height_min = 0.03
         swing_height_max = 0.05
